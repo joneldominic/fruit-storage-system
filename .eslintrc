@@ -29,11 +29,22 @@
         "variableDeclaration": true,
         "variableDeclarationIgnoreFunction": false
       }
+    ],
+    "import/extensions": [
+      1,
+      {
+        "js": "always"
+      }
     ]
   },
   "settings": {
     "react": {
       "version": "detect"
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts"]
+      }
     }
   }
 }
