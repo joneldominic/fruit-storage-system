@@ -4,8 +4,8 @@
   "description": "Skand.io Backend DD Task",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node build/index.js",
-    "start:dev": "npx nodemon",
+    "start": "npx nodemon",
+    "start:prod": "npm run build && node build/index.js",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
     "prettier-format": "prettier --config .prettierrc ./src/**/*.{js,ts} --write",
