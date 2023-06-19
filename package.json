@@ -1,0 +1,30 @@
+{
+  "name": "fruit-storage-system",
+  "version": "1.0.0",
+  "description": "Skand.io Backend DD Task",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build && node build/index.js",
+    "start:dev": "npx nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf ./build && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joneldominic/fruit-storage-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joneldominic/fruit-storage-system/issues"
+  },
+  "homepage": "https://github.com/joneldominic/fruit-storage-system#readme",
+  "devDependencies": {
+    "@types/node": "^20.3.1",
+    "nodemon": "^2.0.22",
+    "rimraf": "^5.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3"
+  }
+}
