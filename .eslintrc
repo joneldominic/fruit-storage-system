@@ -17,6 +17,7 @@
     "no-console": 1,
     "no-loops/no-loops": 1,
     "prettier/prettier": 2,
+    "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/typedef": [
       1,
       {
