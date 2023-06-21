@@ -7,6 +7,11 @@ input CreateFruitInput {
   name: String!
 }
 
+input DeleteFruitInput {
+  forceDelete: Boolean
+  name: String!
+}
+
 type Fruit {
   description: String
   id: ID
@@ -29,7 +34,7 @@ type FruitStorageWithFruit {
 
 type Mutation {
   createFruitForFruitStorage(input: CreateFruitInput!): FruitStorageWithFruit
-  deleteFruitFromFruitStorage(forceDelete: Boolean!, name: String!): FruitStorage
+  deleteFruitFromFruitStorage(input: DeleteFruitInput!): FruitStorageWithFruit
   removeFruitFromFruitStorage(input: StoreRemoveFruitInput!): FruitStorageWithFruit
   storeFruitToFruitStorage(input: StoreRemoveFruitInput!): FruitStorageWithFruit
   updateFruitForFruitStorage(input: UpdateFruitInput!): FruitStorageWithFruit

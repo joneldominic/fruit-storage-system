@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable consistent-return */
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Fruit } from '../models/Fruit';
 import { FruitStorage } from '../models/FruitStorage';
 
@@ -212,39 +208,35 @@ export const updateFruitForFruitStorageResolver = async (args: IMutationRequestM
   }
 };
 
-export const deleteFruitFromFruitStorageResolver = (args: IMutationRequestModel) => {
-  // TODO: Validations
-  /* 
-    1. Limit description to 10 characters
-    2. Fruit name should be unique
-  */
-
+export const deleteFruitFromFruitStorageResolver = async (args: IMutationRequestModel) => {
   try {
-    /* const fruitFilter = { name: args.name };
+    const fruitFilter = { name: args.name };
     const fruit = await Fruit.findOne(fruitFilter);
 
     if (!fruit) {
       throw new Error('Fruit not found!');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    fruit.description = args.description!;
-    const updatedFruit = (await fruit.save()).toJSON();
-
     const fruitStorageFilter = { fruitId: fruit._id };
-    const fruitStorageUpdate = {
-      ...(args.limit && { limit: args.limit })
-    };
-    const updatedFruitStorage = (
-      await FruitStorage.findOneAndUpdate(fruitStorageFilter, fruitStorageUpdate, {
-        new: true
-      })
-    )?.toJSON();
+    const fruitStorage = await FruitStorage.findOne(fruitStorageFilter);
+
+    if (!fruitStorage) {
+      throw new Error('Fruit Storage not found!');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const storageHasFruit = fruitStorage.count! > 0;
+    if (storageHasFruit && !args.forceDelete) {
+      throw new Error('Cannot delete the fruit. The fruit storage still contains items.');
+    }
+
+    await FruitStorage.deleteOne(fruitStorageFilter);
+    await Fruit.deleteOne(fruitFilter);
 
     return {
-      ...updatedFruitStorage,
-      fruit: updatedFruit
-    }; */
+      ...fruitStorage.toJSON(),
+      fruit: fruit.toJSON()
+    };
   } catch (error) {
     console.error(error);
     return error;

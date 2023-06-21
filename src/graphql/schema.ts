@@ -5,7 +5,6 @@ import {
   stringArg,
   extendType,
   nonNull,
-  booleanArg,
   inputObjectType
 } from 'nexus';
 import path from 'path';
@@ -14,7 +13,8 @@ import {
   storeFruitToFruitStorageResolver,
   createFruitForFruitStorageResolver,
   updateFruitForFruitStorageResolver,
-  removeFruitFromFruitStorageResolver
+  removeFruitFromFruitStorageResolver,
+  deleteFruitFromFruitStorageResolver
 } from './resolver';
 
 const Fruit = objectType({
@@ -72,6 +72,14 @@ const UpdateFruitInput = inputObjectType({
   }
 });
 
+const DeleteFruitInput = inputObjectType({
+  name: 'DeleteFruitInput',
+  definition(t: any) {
+    t.nonNull.string('name');
+    t.boolean('forceDelete');
+  }
+});
+
 const Query = queryType({
   definition(t: any) {
     t.field('findFruit', {
@@ -116,14 +124,11 @@ const Mutation = extendType({
       resolve: (_: any, args: any) => updateFruitForFruitStorageResolver(args.input)
     });
     t.field('deleteFruitFromFruitStorage', {
-      type: 'FruitStorage',
+      type: 'FruitStorageWithFruit',
       args: {
-        name: nonNull(stringArg()),
-        forceDelete: nonNull(booleanArg())
+        input: nonNull(DeleteFruitInput)
       },
-      resolve: (_: any, args: any) => ({
-        name: args.name
-      })
+      resolve: (_: any, args: any) => deleteFruitFromFruitStorageResolver(args.input)
     });
   }
 });

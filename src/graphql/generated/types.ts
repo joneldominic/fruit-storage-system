@@ -14,6 +14,11 @@ export interface NexusGenInputs {
     limit: number; // Int!
     name: string; // String!
   };
+  DeleteFruitInput: {
+    // input type
+    forceDelete?: boolean | null; // Boolean
+    name: string; // String!
+  };
   StoreRemoveFruitInput: {
     // input type
     amount: number; // Int!
@@ -94,7 +99,7 @@ export interface NexusGenFieldTypes {
   Mutation: {
     // field return type
     createFruitForFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
-    deleteFruitFromFruitStorage: NexusGenRootTypes['FruitStorage'] | null; // FruitStorage
+    deleteFruitFromFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
     removeFruitFromFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
     storeFruitToFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
     updateFruitForFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
@@ -129,7 +134,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: {
     // field return type name
     createFruitForFruitStorage: 'FruitStorageWithFruit';
-    deleteFruitFromFruitStorage: 'FruitStorage';
+    deleteFruitFromFruitStorage: 'FruitStorageWithFruit';
     removeFruitFromFruitStorage: 'FruitStorageWithFruit';
     storeFruitToFruitStorage: 'FruitStorageWithFruit';
     updateFruitForFruitStorage: 'FruitStorageWithFruit';
@@ -148,8 +153,7 @@ export interface NexusGenArgTypes {
     };
     deleteFruitFromFruitStorage: {
       // args
-      forceDelete: boolean; // Boolean!
-      name: string; // String!
+      input: NexusGenInputs['DeleteFruitInput']; // DeleteFruitInput!
     };
     removeFruitFromFruitStorage: {
       // args
