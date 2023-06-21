@@ -7,7 +7,14 @@ declare global {
   interface NexusGen extends NexusGenTypes {}
 }
 
-export interface NexusGenInputs {}
+export interface NexusGenInputs {
+  CreateFruitInput: {
+    // input type
+    description: string; // String!
+    limit: number; // Int!
+    name: string; // String!
+  };
+}
 
 export interface NexusGenEnums {}
 
@@ -30,6 +37,13 @@ export interface NexusGenObjects {
     // root type
     count?: number | null; // Int
     fruitId?: string | null; // String
+    id?: string | null; // ID
+    limit?: number | null; // Int
+  };
+  FruitStorageWithFruit: {
+    // root type
+    count?: number | null; // Int
+    fruit?: NexusGenRootTypes['Fruit'] | null; // Fruit
     id?: string | null; // ID
     limit?: number | null; // Int
   };
@@ -59,9 +73,16 @@ export interface NexusGenFieldTypes {
     id: string | null; // ID
     limit: number | null; // Int
   };
+  FruitStorageWithFruit: {
+    // field return type
+    count: number | null; // Int
+    fruit: NexusGenRootTypes['Fruit'] | null; // Fruit
+    id: string | null; // ID
+    limit: number | null; // Int
+  };
   Mutation: {
     // field return type
-    createFruitForFruitStorage: NexusGenRootTypes['FruitStorage'] | null; // FruitStorage
+    createFruitForFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
     deleteFruitFromFruitStorage: NexusGenRootTypes['FruitStorage'] | null; // FruitStorage
     removeFruitFromFruitStorage: NexusGenRootTypes['FruitStorage'] | null; // FruitStorage
     storeFruitToFruitStorage: NexusGenRootTypes['FruitStorage'] | null; // FruitStorage
@@ -87,9 +108,16 @@ export interface NexusGenFieldTypeNames {
     id: 'ID';
     limit: 'Int';
   };
+  FruitStorageWithFruit: {
+    // field return type name
+    count: 'Int';
+    fruit: 'Fruit';
+    id: 'ID';
+    limit: 'Int';
+  };
   Mutation: {
     // field return type name
-    createFruitForFruitStorage: 'FruitStorage';
+    createFruitForFruitStorage: 'FruitStorageWithFruit';
     deleteFruitFromFruitStorage: 'FruitStorage';
     removeFruitFromFruitStorage: 'FruitStorage';
     storeFruitToFruitStorage: 'FruitStorage';
@@ -105,9 +133,7 @@ export interface NexusGenArgTypes {
   Mutation: {
     createFruitForFruitStorage: {
       // args
-      description: string; // String!
-      limit: number; // Int!
-      name: string; // String!
+      input: NexusGenInputs['CreateFruitInput']; // CreateFruitInput!
     };
     deleteFruitFromFruitStorage: {
       // args
@@ -145,7 +171,7 @@ export interface NexusGenTypeInterfaces {}
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = never;
 

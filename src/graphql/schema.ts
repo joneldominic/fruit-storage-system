@@ -6,8 +6,11 @@ import {
   extendType,
   nonNull,
   intArg,
-  booleanArg
+  booleanArg,
+  inputObjectType
 } from 'nexus';
+import path from 'path';
+import { storeFruitToFruitStorageResolver, createFruitForFruitStorageResolver } from './resolver';
 
 const Fruit = objectType({
   name: 'Fruit',
@@ -28,6 +31,16 @@ const FruitStorage = objectType({
   }
 });
 
+const FruitStorageWithFruit = objectType({
+  name: 'FruitStorageWithFruit',
+  definition(t: any) {
+    t.id('id');
+    t.field('fruit', { type: 'Fruit' });
+    t.int('limit');
+    t.int('count');
+  }
+});
+
 const Query = queryType({
   definition(t: any) {
     t.field('findFruit', {
@@ -42,6 +55,15 @@ const Query = queryType({
   }
 });
 
+const CreateFruitInput = inputObjectType({
+  name: 'CreateFruitInput',
+  definition(t: any) {
+    t.nonNull.string('name');
+    t.nonNull.string('description');
+    t.nonNull.int('limit');
+  }
+});
+
 const Mutation = extendType({
   type: 'Mutation',
   definition(t: any) {
@@ -51,9 +73,9 @@ const Mutation = extendType({
         name: nonNull(stringArg()),
         amount: nonNull(intArg())
       },
-      resolve: (_: any, args: any) => ({
-        name: args.name
-      })
+      resolve: async (_: any, args: any) => {
+        await storeFruitToFruitStorageResolver(args);
+      }
     });
     t.field('removeFruitFromFruitStorage', {
       type: 'FruitStorage',
@@ -66,15 +88,11 @@ const Mutation = extendType({
       })
     });
     t.field('createFruitForFruitStorage', {
-      type: 'FruitStorage',
+      type: 'FruitStorageWithFruit',
       args: {
-        name: nonNull(stringArg()),
-        description: nonNull(stringArg()),
-        limit: nonNull(intArg())
+        input: nonNull(CreateFruitInput)
       },
-      resolve: (_: any, args: any) => ({
-        name: args.name
-      })
+      resolve: (_: any, args: any) => createFruitForFruitStorageResolver(args.input)
     });
     t.field('updateFruitForFruitStorage', {
       type: 'FruitStorage',
@@ -100,11 +118,11 @@ const Mutation = extendType({
   }
 });
 
-const schema: any = makeSchema({
-  types: [Fruit, Query, FruitStorage, Mutation],
+const schema = makeSchema({
+  types: [Fruit, FruitStorage, FruitStorageWithFruit, Query, Mutation],
   outputs: {
-    schema: `${__dirname}/generated/schema.graphql`,
-    typegen: `${__dirname}/generated/types.ts`
+    schema: path.join(__dirname, 'generated', 'schema.graphql'),
+    typegen: path.join(__dirname, 'generated', 'types.ts')
   },
   prettierConfig: `${__dirname}/../../.prettierrc`
 });
