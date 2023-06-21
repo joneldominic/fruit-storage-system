@@ -1,5 +1,5 @@
 import { ApolloServer } from 'apollo-server-express';
-import express, { Request, Response } from 'express';
+import express, { Response } from 'express';
 import dotenv from 'dotenv';
 import schema from './graphql/schema';
 import { connectDB } from './database';
@@ -17,18 +17,16 @@ const startServer = async () => {
   const apollo = new ApolloServer({ schema });
   await apollo.start();
   apollo.applyMiddleware({ app });
+
+  await connectDB({ uri: mongoDBUri, port: mongoDBPort, dbName: mongoDBName });
+
+  app.get('/', (_, res: Response) => {
+    res.redirect('/graphql');
+  });
+
+  app.listen(appPort, () => {
+    console.info(`⚡️[server]: Server is running at http://localhost:${appPort}`);
+  });
 };
 
 startServer();
-connectDB({ uri: mongoDBUri, port: mongoDBPort, dbName: mongoDBName });
-
-app.get('/', (req: Request, res: Response) => {
-  res.redirect('/graphql');
-});
-
-app.listen(appPort, () => {
-  // eslint-disable-next-line no-console
-  console.log(`⚡️[server]: Server is running at http://localhost:${appPort}`);
-});
-
-export default app;

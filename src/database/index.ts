@@ -3,12 +3,10 @@ import mongoose from 'mongoose';
 mongoose.Promise = global.Promise;
 
 mongoose.connection.on('error', (err) => {
-  // eslint-disable-next-line no-console
   console.error(`MongoDB Connection Error ${err}`);
 });
 
 mongoose.connection.on('connected', () => {
-  // eslint-disable-next-line no-console
   console.info('Connected To DB');
 });
 
@@ -18,8 +16,15 @@ interface IMongoConfig {
   port: string | undefined;
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export const connectDB = (config: IMongoConfig) => {
+let mongoDDConnection: mongoose.Connection;
+
+export const connectDB = async (config: IMongoConfig) => {
   const dbUrl = `${config.uri}:${config.port}/${config.dbName}`;
-  mongoose.connect(dbUrl);
+
+  console.info(`Connecting to mongoDB: ${dbUrl}`);
+
+  await mongoose.connect(dbUrl);
+  mongoDDConnection = mongoose.connection;
 };
+
+export const getDBConnection = () => mongoDDConnection;
