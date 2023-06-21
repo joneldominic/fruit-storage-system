@@ -5,15 +5,16 @@ import {
   stringArg,
   extendType,
   nonNull,
-  intArg,
   booleanArg,
   inputObjectType
 } from 'nexus';
 import path from 'path';
 import {
+  findFruitResolver,
   storeFruitToFruitStorageResolver,
   createFruitForFruitStorageResolver,
-  updateFruitForFruitStorageResolver
+  updateFruitForFruitStorageResolver,
+  removeFruitFromFruitStorageResolver
 } from './resolver';
 
 const Fruit = objectType({
@@ -45,22 +46,8 @@ const FruitStorageWithFruit = objectType({
   }
 });
 
-const Query = queryType({
-  definition(t: any) {
-    t.field('findFruit', {
-      type: 'Fruit',
-      args: { name: stringArg() },
-      resolve: (_: any, args: any) => ({
-        id: 1,
-        name: args.name,
-        description: 'test'
-      })
-    });
-  }
-});
-
-const StoreFruitInput = inputObjectType({
-  name: 'StoreFruitInput',
+const StoreRemoveFruitInput = inputObjectType({
+  name: 'StoreRemoveFruitInput',
   definition(t: any) {
     t.nonNull.string('name');
     t.nonNull.int('amount');
@@ -85,25 +72,34 @@ const UpdateFruitInput = inputObjectType({
   }
 });
 
+const Query = queryType({
+  definition(t: any) {
+    t.field('findFruit', {
+      type: 'FruitStorageWithFruit',
+      args: {
+        name: nonNull(stringArg())
+      },
+      resolve: (_: any, args: any) => findFruitResolver(args)
+    });
+  }
+});
+
 const Mutation = extendType({
   type: 'Mutation',
   definition(t: any) {
     t.field('storeFruitToFruitStorage', {
       type: 'FruitStorageWithFruit',
       args: {
-        input: nonNull(StoreFruitInput)
+        input: nonNull(StoreRemoveFruitInput)
       },
       resolve: async (_: any, args: any) => storeFruitToFruitStorageResolver(args.input)
     });
     t.field('removeFruitFromFruitStorage', {
-      type: 'FruitStorage',
+      type: 'FruitStorageWithFruit',
       args: {
-        name: nonNull(stringArg()),
-        amount: nonNull(intArg())
+        input: nonNull(StoreRemoveFruitInput)
       },
-      resolve: (_: any, args: any) => ({
-        name: args.name
-      })
+      resolve: (_: any, args: any) => removeFruitFromFruitStorageResolver(args.input)
     });
     t.field('createFruitForFruitStorage', {
       type: 'FruitStorageWithFruit',

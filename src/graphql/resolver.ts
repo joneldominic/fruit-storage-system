@@ -5,6 +5,10 @@
 import { Fruit } from '../models/Fruit';
 import { FruitStorage } from '../models/FruitStorage';
 
+interface IQueryRequestModel {
+  name: string;
+}
+
 interface IMutationRequestModel {
   name: string | undefined;
   amount: number | undefined;
@@ -12,6 +16,32 @@ interface IMutationRequestModel {
   limit: number | undefined;
   forceDelete: boolean | undefined;
 }
+
+export const findFruitResolver = async (args: IQueryRequestModel) => {
+  try {
+    const fruitFilter = { name: args.name };
+    const fruit = await Fruit.findOne(fruitFilter);
+
+    if (!fruit) {
+      throw new Error('Fruit not found!');
+    }
+
+    const fruitStorageFilter = { fruitId: fruit._id };
+    const fruitStorage = await FruitStorage.findOne(fruitStorageFilter);
+
+    if (!fruitStorage) {
+      throw new Error('Fruit Storage not found!');
+    }
+
+    return {
+      ...fruitStorage.toJSON(),
+      fruit: fruit.toJSON()
+    };
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
 
 export const storeFruitToFruitStorageResolver = async (args: IMutationRequestModel) => {
   try {
