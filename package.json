@@ -13,7 +13,8 @@
     "build": "rimraf ./build && tsc",
     "prepare": "husky install",
     "postinstall": "husky install",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "generate:nexus": "ts-node --transpile-only src/graphql/schema.ts"
   },
   "config": {
     "commitizen": {
