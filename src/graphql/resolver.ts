@@ -15,6 +15,11 @@ interface IMutationRequestModel {
 
 export const storeFruitToFruitStorageResolver = async (args: IMutationRequestModel) => {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (args.amount! <= 0) {
+      throw new Error('Invalid amount. Please provide a positive number.');
+    }
+
     const fruitFilter = { name: args.name };
     const fruit = await Fruit.findOne(fruitFilter);
 
@@ -56,7 +61,55 @@ export const storeFruitToFruitStorageResolver = async (args: IMutationRequestMod
   }
 };
 
-export const removeFruitFromFruitStorageResolver = (args: IMutationRequestModel) => {};
+export const removeFruitFromFruitStorageResolver = async (args: IMutationRequestModel) => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (args.amount! <= 0) {
+      throw new Error('Invalid amount. Please provide a positive number.');
+    }
+
+    const fruitFilter = { name: args.name };
+    const fruit = await Fruit.findOne(fruitFilter);
+
+    if (!fruit) {
+      throw new Error('Fruit not found!');
+    }
+
+    const fruitStorageFilter = { fruitId: fruit._id };
+    const fruitStorage = await FruitStorage.findOne(fruitStorageFilter);
+
+    if (!fruitStorage) {
+      throw new Error('Fruit Storage not found!');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const updatedCount = fruitStorage.count! - args.amount!;
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (updatedCount < 0) {
+      throw new Error(
+        'Insufficient quantity for deletion. The available count is less than the requested amount.'
+      );
+    }
+
+    const fruitStorageUpdate = {
+      count: updatedCount
+    };
+    const updatedFruitStorage = (
+      await FruitStorage.findOneAndUpdate(fruitStorageFilter, fruitStorageUpdate, {
+        new: true
+      })
+    )?.toJSON();
+
+    return {
+      ...updatedFruitStorage,
+      fruit: fruit.toJSON()
+    };
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
 
 export const createFruitForFruitStorageResolver = async (args: IMutationRequestModel) => {
   // TODO: Validations
