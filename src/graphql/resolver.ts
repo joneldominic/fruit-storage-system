@@ -48,6 +48,43 @@ export const createFruitForFruitStorageResolver = async (args: IMutationRequestM
   }
 };
 
-export const updateFruitForFruitStorageResolver = (args: IMutationRequestModel) => {};
+export const updateFruitForFruitStorageResolver = async (args: IMutationRequestModel) => {
+  // TODO: Validations
+  /* 
+    1. Limit description to 10 characters
+    2. Fruit name should be unique
+  */
+
+  try {
+    const fruitFilter = { name: args.name };
+    const fruit = await Fruit.findOne(fruitFilter);
+
+    if (!fruit) {
+      throw new Error('Fruit not found!');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    fruit.description = args.description!;
+    const updatedFruit = (await fruit.save()).toJSON();
+
+    const fruitStorageFilter = { fruitId: fruit._id };
+    const fruitStorageUpdate = {
+      ...(args.limit && { limit: args.limit })
+    };
+    const updatedFruitStorage = (
+      await FruitStorage.findOneAndUpdate(fruitStorageFilter, fruitStorageUpdate, {
+        new: true
+      })
+    )?.toJSON();
+
+    return {
+      ...updatedFruitStorage,
+      fruit: updatedFruit
+    };
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
 
 export const deleteFruitFromFruitStorageResolver = (args: IMutationRequestModel) => {};

@@ -10,7 +10,11 @@ import {
   inputObjectType
 } from 'nexus';
 import path from 'path';
-import { storeFruitToFruitStorageResolver, createFruitForFruitStorageResolver } from './resolver';
+import {
+  storeFruitToFruitStorageResolver,
+  createFruitForFruitStorageResolver,
+  updateFruitForFruitStorageResolver
+} from './resolver';
 
 const Fruit = objectType({
   name: 'Fruit',
@@ -64,6 +68,15 @@ const CreateFruitInput = inputObjectType({
   }
 });
 
+const UpdateFruitInput = inputObjectType({
+  name: 'UpdateFruitInput',
+  definition(t: any) {
+    t.nonNull.string('name');
+    t.nonNull.string('description');
+    t.int('limit');
+  }
+});
+
 const Mutation = extendType({
   type: 'Mutation',
   definition(t: any) {
@@ -95,15 +108,11 @@ const Mutation = extendType({
       resolve: (_: any, args: any) => createFruitForFruitStorageResolver(args.input)
     });
     t.field('updateFruitForFruitStorage', {
-      type: 'FruitStorage',
+      type: 'FruitStorageWithFruit',
       args: {
-        name: nonNull(stringArg()),
-        description: nonNull(stringArg()),
-        limit: nonNull(intArg())
+        input: nonNull(UpdateFruitInput)
       },
-      resolve: (_: any, args: any) => ({
-        name: args.name
-      })
+      resolve: (_: any, args: any) => updateFruitForFruitStorageResolver(args.input)
     });
     t.field('deleteFruitFromFruitStorage', {
       type: 'FruitStorage',

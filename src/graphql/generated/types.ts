@@ -14,6 +14,12 @@ export interface NexusGenInputs {
     limit: number; // Int!
     name: string; // String!
   };
+  UpdateFruitInput: {
+    // input type
+    description: string; // String!
+    limit?: number | null; // Int
+    name: string; // String!
+  };
 }
 
 export interface NexusGenEnums {}
@@ -86,7 +92,7 @@ export interface NexusGenFieldTypes {
     deleteFruitFromFruitStorage: NexusGenRootTypes['FruitStorage'] | null; // FruitStorage
     removeFruitFromFruitStorage: NexusGenRootTypes['FruitStorage'] | null; // FruitStorage
     storeFruitToFruitStorage: NexusGenRootTypes['FruitStorage'] | null; // FruitStorage
-    updateFruitForFruitStorage: NexusGenRootTypes['FruitStorage'] | null; // FruitStorage
+    updateFruitForFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
   };
   Query: {
     // field return type
@@ -121,7 +127,7 @@ export interface NexusGenFieldTypeNames {
     deleteFruitFromFruitStorage: 'FruitStorage';
     removeFruitFromFruitStorage: 'FruitStorage';
     storeFruitToFruitStorage: 'FruitStorage';
-    updateFruitForFruitStorage: 'FruitStorage';
+    updateFruitForFruitStorage: 'FruitStorageWithFruit';
   };
   Query: {
     // field return type name
@@ -152,9 +158,7 @@ export interface NexusGenArgTypes {
     };
     updateFruitForFruitStorage: {
       // args
-      description: string; // String!
-      limit: number; // Int!
-      name: string; // String!
+      input: NexusGenInputs['UpdateFruitInput']; // UpdateFruitInput!
     };
   };
   Query: {
