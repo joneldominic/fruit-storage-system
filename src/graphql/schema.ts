@@ -9,7 +9,7 @@ import {
   booleanArg
 } from 'nexus';
 
-const Fruit: any = objectType({
+const Fruit = objectType({
   name: 'Fruit',
   definition(t: any) {
     t.id('id');
@@ -18,7 +18,7 @@ const Fruit: any = objectType({
   }
 });
 
-const FruitStorage: any = objectType({
+const FruitStorage = objectType({
   name: 'FruitStorage',
   definition(t: any) {
     t.id('id');
@@ -28,7 +28,7 @@ const FruitStorage: any = objectType({
   }
 });
 
-const Query: any = queryType({
+const Query = queryType({
   definition(t: any) {
     t.field('findFruit', {
       type: 'Fruit',
@@ -42,7 +42,7 @@ const Query: any = queryType({
   }
 });
 
-const Mutation: any = extendType({
+const Mutation = extendType({
   type: 'Mutation',
   definition(t: any) {
     t.field('storeFruitToFruitStorage', {
