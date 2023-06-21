@@ -1,17 +1,26 @@
+import { ApolloServer } from 'apollo-server-express';
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
+import schema from './graphql/schema';
 
 dotenv.config();
-dotenv.config({ path: `.env.local`, override: true });
-
-const app: Express = express();
 const port: string | undefined = process.env.PORT;
 
+const app: Express = express();
+
+const startServer: any = async () => {
+  const apollo: ApolloServer = new ApolloServer({ schema });
+  await apollo.start();
+  apollo.applyMiddleware({ app });
+};
+startServer();
+
 app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server is running');
+  res.redirect('/graphql');
 });
 
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
 
