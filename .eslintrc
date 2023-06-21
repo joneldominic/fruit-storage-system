@@ -13,10 +13,11 @@
     "airbnb-base",
     "prettier"
   ],
-  "rules": { 
-    "no-console": 1,
+  "rules": {
+    "no-console": [1, { "allow": ["info","warn", "error"] }],
     "no-loops/no-loops": 1,
     "prettier/prettier": 2,
+    "no-underscore-dangle": [0, { "allow": ["_place"] }],
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/typedef": [
       1,
