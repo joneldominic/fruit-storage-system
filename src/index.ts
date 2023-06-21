@@ -1,27 +1,34 @@
 import { ApolloServer } from 'apollo-server-express';
-import express, { Express, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import schema from './graphql/schema';
+import { connectDB } from './database';
 
 dotenv.config();
-const port: string | undefined = process.env.PORT;
 
-const app: Express = express();
+const appPort = process.env.PORT;
+const mongoDBUri = process.env.MONGODB_URI;
+const mongoDBPort = process.env.MONGODB_PORT;
+const mongoDBName = process.env.MONGODB_NAME;
 
-const startServer: any = async () => {
-  const apollo: ApolloServer = new ApolloServer({ schema });
+const app = express();
+
+const startServer = async () => {
+  const apollo = new ApolloServer({ schema });
   await apollo.start();
   apollo.applyMiddleware({ app });
 };
+
 startServer();
+connectDB({ uri: mongoDBUri, port: mongoDBPort, dbName: mongoDBName });
 
 app.get('/', (req: Request, res: Response) => {
   res.redirect('/graphql');
 });
 
-app.listen(port, () => {
+app.listen(appPort, () => {
   // eslint-disable-next-line no-console
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+  console.log(`⚡️[server]: Server is running at http://localhost:${appPort}`);
 });
 
 export default app;
