@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Fruit } from '../models/Fruit';
@@ -12,7 +13,48 @@ interface IMutationRequestModel {
   forceDelete: boolean | undefined;
 }
 
-export const storeFruitToFruitStorageResolver = async (args: IMutationRequestModel) => {};
+export const storeFruitToFruitStorageResolver = async (args: IMutationRequestModel) => {
+  try {
+    const fruitFilter = { name: args.name };
+    const fruit = await Fruit.findOne(fruitFilter);
+
+    if (!fruit) {
+      throw new Error('Fruit not found!');
+    }
+
+    const fruitStorageFilter = { fruitId: fruit._id };
+    const fruitStorage = await FruitStorage.findOne(fruitStorageFilter);
+
+    if (!fruitStorage) {
+      throw new Error('Fruit Storage not found!');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const updatedCount = fruitStorage.count! + args.amount!;
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (fruitStorage.limit! < updatedCount) {
+      throw new Error(`Storage limit exceeded. Cannot add more ${fruit.name}.`);
+    }
+
+    const fruitStorageUpdate = {
+      count: updatedCount
+    };
+    const updatedFruitStorage = (
+      await FruitStorage.findOneAndUpdate(fruitStorageFilter, fruitStorageUpdate, {
+        new: true
+      })
+    )?.toJSON();
+
+    return {
+      ...updatedFruitStorage,
+      fruit: fruit.toJSON()
+    };
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
 
 export const removeFruitFromFruitStorageResolver = (args: IMutationRequestModel) => {};
 
@@ -87,4 +129,41 @@ export const updateFruitForFruitStorageResolver = async (args: IMutationRequestM
   }
 };
 
-export const deleteFruitFromFruitStorageResolver = (args: IMutationRequestModel) => {};
+export const deleteFruitFromFruitStorageResolver = (args: IMutationRequestModel) => {
+  // TODO: Validations
+  /* 
+    1. Limit description to 10 characters
+    2. Fruit name should be unique
+  */
+
+  try {
+    /* const fruitFilter = { name: args.name };
+    const fruit = await Fruit.findOne(fruitFilter);
+
+    if (!fruit) {
+      throw new Error('Fruit not found!');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    fruit.description = args.description!;
+    const updatedFruit = (await fruit.save()).toJSON();
+
+    const fruitStorageFilter = { fruitId: fruit._id };
+    const fruitStorageUpdate = {
+      ...(args.limit && { limit: args.limit })
+    };
+    const updatedFruitStorage = (
+      await FruitStorage.findOneAndUpdate(fruitStorageFilter, fruitStorageUpdate, {
+        new: true
+      })
+    )?.toJSON();
+
+    return {
+      ...updatedFruitStorage,
+      fruit: updatedFruit
+    }; */
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};

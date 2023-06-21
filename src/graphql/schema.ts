@@ -59,6 +59,14 @@ const Query = queryType({
   }
 });
 
+const StoreFruitInput = inputObjectType({
+  name: 'StoreFruitInput',
+  definition(t: any) {
+    t.nonNull.string('name');
+    t.nonNull.int('amount');
+  }
+});
+
 const CreateFruitInput = inputObjectType({
   name: 'CreateFruitInput',
   definition(t: any) {
@@ -81,14 +89,11 @@ const Mutation = extendType({
   type: 'Mutation',
   definition(t: any) {
     t.field('storeFruitToFruitStorage', {
-      type: 'FruitStorage',
+      type: 'FruitStorageWithFruit',
       args: {
-        name: nonNull(stringArg()),
-        amount: nonNull(intArg())
+        input: nonNull(StoreFruitInput)
       },
-      resolve: async (_: any, args: any) => {
-        await storeFruitToFruitStorageResolver(args);
-      }
+      resolve: async (_: any, args: any) => storeFruitToFruitStorageResolver(args.input)
     });
     t.field('removeFruitFromFruitStorage', {
       type: 'FruitStorage',

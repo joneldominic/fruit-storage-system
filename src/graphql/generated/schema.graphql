@@ -31,12 +31,17 @@ type Mutation {
   createFruitForFruitStorage(input: CreateFruitInput!): FruitStorageWithFruit
   deleteFruitFromFruitStorage(forceDelete: Boolean!, name: String!): FruitStorage
   removeFruitFromFruitStorage(amount: Int!, name: String!): FruitStorage
-  storeFruitToFruitStorage(amount: Int!, name: String!): FruitStorage
+  storeFruitToFruitStorage(input: StoreFruitInput!): FruitStorageWithFruit
   updateFruitForFruitStorage(input: UpdateFruitInput!): FruitStorageWithFruit
 }
 
 type Query {
   findFruit(name: String): Fruit
+}
+
+input StoreFruitInput {
+  amount: Int!
+  name: String!
 }
 
 input UpdateFruitInput {
