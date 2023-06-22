@@ -1,5 +1,6 @@
 import { Fruit } from '../models/Fruit';
 import { FruitStorage } from '../models/FruitStorage';
+import { findFruit, findFruitStorage } from './utils';
 
 interface IQueryRequestModel {
   name: string;
@@ -16,22 +17,18 @@ interface IMutationRequestModel {
 export const findFruitResolver = async (args: IQueryRequestModel) => {
   try {
     const fruitFilter = { name: args.name };
-    const fruit = await Fruit.findOne(fruitFilter);
+    const fruit = await findFruit({ filter: fruitFilter, isExpected: true, toJson: true });
 
-    if (!fruit) {
-      throw new Error('Fruit not found!');
-    }
-
-    const fruitStorageFilter = { fruitId: fruit._id };
-    const fruitStorage = await FruitStorage.findOne(fruitStorageFilter);
-
-    if (!fruitStorage) {
-      throw new Error('Fruit Storage not found!');
-    }
+    const fruitStorageFilter = { fruitId: fruit?.id };
+    const fruitStorage = await findFruitStorage({
+      filter: fruitStorageFilter,
+      isExpected: true,
+      toJson: true
+    });
 
     return {
-      ...fruitStorage.toJSON(),
-      fruit: fruit.toJSON()
+      ...fruitStorage,
+      fruit
     };
   } catch (error) {
     console.error(error);
@@ -47,25 +44,21 @@ export const storeFruitToFruitStorageResolver = async (args: IMutationRequestMod
     }
 
     const fruitFilter = { name: args.name };
-    const fruit = await Fruit.findOne(fruitFilter);
+    const fruit = await findFruit({ filter: fruitFilter, isExpected: true, toJson: true });
 
-    if (!fruit) {
-      throw new Error('Fruit not found!');
-    }
-
-    const fruitStorageFilter = { fruitId: fruit._id };
-    const fruitStorage = await FruitStorage.findOne(fruitStorageFilter);
-
-    if (!fruitStorage) {
-      throw new Error('Fruit Storage not found!');
-    }
+    const fruitStorageFilter = { fruitId: fruit?.id };
+    const fruitStorage = await findFruitStorage({
+      filter: fruitStorageFilter,
+      isExpected: true,
+      toJson: true
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const updatedCount = fruitStorage.count! + args.amount!;
+    const updatedCount = fruitStorage!.count! + args.amount!;
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (fruitStorage.limit! < updatedCount) {
-      throw new Error(`Storage limit exceeded. Cannot add more ${fruit.name}.`);
+    if (fruitStorage!.limit! < updatedCount) {
+      throw new Error(`Storage limit exceeded. Cannot add more ${fruit?.name}.`);
     }
 
     const fruitStorageUpdate = {
@@ -79,7 +72,7 @@ export const storeFruitToFruitStorageResolver = async (args: IMutationRequestMod
 
     return {
       ...updatedFruitStorage,
-      fruit: fruit.toJSON()
+      fruit
     };
   } catch (error) {
     console.error(error);
@@ -95,21 +88,17 @@ export const removeFruitFromFruitStorageResolver = async (args: IMutationRequest
     }
 
     const fruitFilter = { name: args.name };
-    const fruit = await Fruit.findOne(fruitFilter);
+    const fruit = await findFruit({ filter: fruitFilter, isExpected: true, toJson: true });
 
-    if (!fruit) {
-      throw new Error('Fruit not found!');
-    }
-
-    const fruitStorageFilter = { fruitId: fruit._id };
-    const fruitStorage = await FruitStorage.findOne(fruitStorageFilter);
-
-    if (!fruitStorage) {
-      throw new Error('Fruit Storage not found!');
-    }
+    const fruitStorageFilter = { fruitId: fruit?.id };
+    const fruitStorage = await findFruitStorage({
+      filter: fruitStorageFilter,
+      isExpected: true,
+      toJson: true
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const updatedCount = fruitStorage.count! - args.amount!;
+    const updatedCount = fruitStorage!.count! - args.amount!;
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     if (updatedCount < 0) {
@@ -129,7 +118,7 @@ export const removeFruitFromFruitStorageResolver = async (args: IMutationRequest
 
     return {
       ...updatedFruitStorage,
-      fruit: fruit.toJSON()
+      fruit
     };
   } catch (error) {
     console.error(error);
@@ -139,10 +128,10 @@ export const removeFruitFromFruitStorageResolver = async (args: IMutationRequest
 
 export const createFruitForFruitStorageResolver = async (args: IMutationRequestModel) => {
   try {
-    const existingFruit = await Fruit.findOne({ name: args.name });
-    if (existingFruit) {
-      throw new Error(`${args.name} already exists.`);
-    }
+    await findFruit({
+      filter: { name: args.name },
+      isExpected: false
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     if (args.description!.length! > 30) {
@@ -181,11 +170,7 @@ export const updateFruitForFruitStorageResolver = async (args: IMutationRequestM
     }
 
     const fruitFilter = { name: args.name };
-    const fruit = await Fruit.findOne(fruitFilter);
-
-    if (!fruit) {
-      throw new Error('Fruit not found!');
-    }
+    const fruit: any = await findFruit({ filter: fruitFilter, isExpected: true });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     fruit.description = args.description!;
@@ -214,21 +199,17 @@ export const updateFruitForFruitStorageResolver = async (args: IMutationRequestM
 export const deleteFruitFromFruitStorageResolver = async (args: IMutationRequestModel) => {
   try {
     const fruitFilter = { name: args.name };
-    const fruit = await Fruit.findOne(fruitFilter);
+    const fruit = await findFruit({ filter: fruitFilter, isExpected: true, toJson: true });
 
-    if (!fruit) {
-      throw new Error('Fruit not found!');
-    }
-
-    const fruitStorageFilter = { fruitId: fruit._id };
-    const fruitStorage = await FruitStorage.findOne(fruitStorageFilter);
-
-    if (!fruitStorage) {
-      throw new Error('Fruit Storage not found!');
-    }
+    const fruitStorageFilter = { fruitId: fruit?.id };
+    const fruitStorage = await findFruitStorage({
+      filter: fruitStorageFilter,
+      isExpected: true,
+      toJson: true
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const storageHasFruit = fruitStorage.count! > 0;
+    const storageHasFruit = fruitStorage!.count! > 0;
     if (storageHasFruit && !args.forceDelete) {
       throw new Error('Cannot delete the fruit. The fruit storage still contains items.');
     }
@@ -237,8 +218,8 @@ export const deleteFruitFromFruitStorageResolver = async (args: IMutationRequest
     await Fruit.deleteOne(fruitFilter);
 
     return {
-      ...fruitStorage.toJSON(),
-      fruit: fruit.toJSON()
+      ...fruitStorage,
+      fruit
     };
   } catch (error) {
     console.error(error);
