@@ -138,13 +138,17 @@ export const removeFruitFromFruitStorageResolver = async (args: IMutationRequest
 };
 
 export const createFruitForFruitStorageResolver = async (args: IMutationRequestModel) => {
-  // TODO: Validations
-  /* 
-    1. Limit description to 10 characters
-    2. Fruit name should be unique
-  */
-
   try {
+    const existingFruit = await Fruit.findOne({ name: args.name });
+    if (existingFruit) {
+      throw new Error(`${args.name} already exists.`);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (args.description!.length! > 30) {
+      throw new Error('Description is too long. Limit it to 30 characters.');
+    }
+
     const fruit = new Fruit({
       name: args.name,
       description: args.description
@@ -170,13 +174,12 @@ export const createFruitForFruitStorageResolver = async (args: IMutationRequestM
 };
 
 export const updateFruitForFruitStorageResolver = async (args: IMutationRequestModel) => {
-  // TODO: Validations
-  /* 
-    1. Limit description to 10 characters
-    2. Fruit name should be unique
-  */
-
   try {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (args.description!.length! > 30) {
+      throw new Error('Description is too long. Limit it to 30 characters.');
+    }
+
     const fruitFilter = { name: args.name };
     const fruit = await Fruit.findOne(fruitFilter);
 
