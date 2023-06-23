@@ -5,6 +5,7 @@ interface ISeedDataParams {
   name: string;
   description: string;
   limit: number;
+  count?: number;
 }
 
 // eslint-disable-next-line import/prefer-default-export
@@ -18,7 +19,7 @@ export const seedData = async (data: ISeedDataParams) => {
   const fruitStorage = new FruitStorage({
     fruitId: savedFruit.id,
     limit: data.limit,
-    count: 0
+    count: data.count || 0
   });
 
   await fruitStorage.save();
