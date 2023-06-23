@@ -36,9 +36,14 @@ describe('Test createFruitForFruitStorageResolver', () => {
       limit: 10
     };
 
-    await createFruitForFruitStorageResolver(lemon);
+    const res: any = await createFruitForFruitStorageResolver(lemon);
 
     const fruit = await Fruit.findOne({ name: lemon.name });
+
+    expect(res).not.toBeInstanceOf(Error);
+
+    expect(res.fruit.id).toBeDefined();
+    expect(res.fruit.name).toBe('lemon');
 
     expect(fruit?._id).toBeDefined();
     expect(fruit?.name).toBe('lemon');
@@ -49,7 +54,7 @@ describe('Test createFruitForFruitStorageResolver', () => {
    * `this is a fruit with a very long description` and a limit of `10`;
    * verify this should fail
    */
-  it('should fail to create fruit with ver long description', async () => {
+  it('should fail to create fruit with very long description', async () => {
     const lemon: any = {
       name: 'lemon',
       description: 'this is a fruit with a very long description',
@@ -58,6 +63,7 @@ describe('Test createFruitForFruitStorageResolver', () => {
 
     const res = await createFruitForFruitStorageResolver(lemon);
 
+    expect(res).toBeInstanceOf(Error);
     expect(res).toEqual(new Error('Description is too long. Limit it to 30 characters.'));
   });
 
@@ -76,6 +82,7 @@ describe('Test createFruitForFruitStorageResolver', () => {
 
     const res = await createFruitForFruitStorageResolver(lemon);
 
+    expect(res).toBeInstanceOf(Error);
     expect(res).toEqual(new Error(`${lemon?.name} already exists.`));
   });
 });
@@ -98,9 +105,14 @@ describe('Test updateFruitForFruitStorageResolver', () => {
     await seedData(lemon);
 
     const updateParams: any = { name: 'lemon', description: 'updated lemon description' };
-    await updateFruitForFruitStorageResolver(updateParams);
+    const res: any = await updateFruitForFruitStorageResolver(updateParams);
 
     const fruit = await Fruit.findOne({ name: lemon.name });
+
+    expect(res).not.toBeInstanceOf(Error);
+
+    expect(res.fruit.name).toBe('lemon');
+    expect(res.fruit.description).toBe(updateParams.description);
 
     expect(fruit?.name).toBe('lemon');
     expect(fruit?.description).toBe(updateParams.description);
@@ -130,9 +142,11 @@ describe('Test updateFruitForFruitStorageResolver', () => {
 
     const fruit = await Fruit.findOne({ name: lemon.name });
 
+    expect(res).toBeInstanceOf(Error);
+    expect(res).toEqual(new Error('Description is too long. Limit it to 30 characters.'));
+
     expect(fruit?.name).toBe('lemon');
     expect(fruit?.description).toBe(lemon.description);
-    expect(res).toEqual(new Error('Description is too long. Limit it to 30 characters.'));
   });
 });
 
@@ -157,11 +171,13 @@ describe('Test deleteFruitFromFruitStorageResolver', () => {
 
     const fruit = await Fruit.findOne({ name: lemon.name });
 
-    expect(fruit?._id).toBeDefined();
-    expect(fruit?.name).toBe('lemon');
+    expect(res).toBeInstanceOf(Error);
     expect(res).toEqual(
       new Error('Cannot delete the fruit. The fruit storage still contains items.')
     );
+
+    expect(fruit?._id).toBeDefined();
+    expect(fruit?.name).toBe('lemon');
   });
 
   /**
@@ -181,9 +197,11 @@ describe('Test deleteFruitFromFruitStorageResolver', () => {
     await seedData(lemon);
 
     const deleteParams: any = { name: lemon.name, forceDelete: true };
-    await deleteFruitFromFruitStorageResolver(deleteParams);
+    const res: any = await deleteFruitFromFruitStorageResolver(deleteParams);
 
     const fruit = await Fruit.findOne({ name: lemon.name });
+
+    expect(res).not.toBeInstanceOf(Error);
 
     expect(fruit?._id).toBeUndefined();
   });
@@ -207,10 +225,14 @@ describe('Test storeFruitToFruitStorageResolver', () => {
     await seedData(lemon);
 
     const storeParams: any = { name: 'lemon', amount: 5 };
-    await storeFruitToFruitStorageResolver(storeParams);
+    const res: any = await storeFruitToFruitStorageResolver(storeParams);
 
     const fruit = await Fruit.findOne({ name: lemon.name });
     const fruitStorage = await FruitStorage.findOne({ fruitId: fruit?._id });
+
+    expect(res).not.toBeInstanceOf(Error);
+    expect(res.fruit.name).toBe(storeParams.name);
+    expect(res.count).toBe(lemon.count + storeParams.amount);
 
     expect(fruit?.name).toBe(storeParams.name);
     expect(fruitStorage?.count).toBe(lemon.count + storeParams.amount);
@@ -237,9 +259,11 @@ describe('Test storeFruitToFruitStorageResolver', () => {
     const fruit = await Fruit.findOne({ name: lemon.name });
     const fruitStorage = await FruitStorage.findOne({ fruitId: fruit?._id });
 
+    expect(res).toBeInstanceOf(Error);
+    expect(res).toEqual(new Error('Storage limit exceeded. Cannot add more lemon.'));
+
     expect(fruit?.name).toBe(storeParams.name);
     expect(fruitStorage?.count).toBe(lemon.count);
-    expect(res).toEqual(new Error('Storage limit exceeded. Cannot add more lemon.'));
   });
 });
 
@@ -261,10 +285,14 @@ describe('Test removeFruitFromFruitStorageResolver', () => {
     await seedData(lemon);
 
     const removeParams: any = { name: 'lemon', amount: 5 };
-    await removeFruitFromFruitStorageResolver(removeParams);
+    const res: any = await removeFruitFromFruitStorageResolver(removeParams);
 
     const fruit = await Fruit.findOne({ name: lemon.name });
     const fruitStorage = await FruitStorage.findOne({ fruitId: fruit?._id });
+
+    expect(res).not.toBeInstanceOf(Error);
+    expect(res.fruit.name).toBe(removeParams.name);
+    expect(res.count).toBe(lemon.count - removeParams.amount);
 
     expect(fruit?.name).toBe(removeParams.name);
     expect(fruitStorage?.count).toBe(lemon.count - removeParams.amount);
@@ -292,13 +320,15 @@ describe('Test removeFruitFromFruitStorageResolver', () => {
     const fruit = await Fruit.findOne({ name: lemon.name });
     const fruitStorage = await FruitStorage.findOne({ fruitId: fruit?._id });
 
-    expect(fruit?.name).toBe(removeParams.name);
-    expect(fruitStorage?.count).toBe(lemon.count);
+    expect(res).toBeInstanceOf(Error);
     expect(res).toEqual(
       new Error(
         'Insufficient quantity for deletion. The available count is less than the requested amount.'
       )
     );
+
+    expect(fruit?.name).toBe(removeParams.name);
+    expect(fruitStorage?.count).toBe(lemon.count);
   });
 });
 
@@ -319,8 +349,15 @@ describe('Test findFruitResolver', () => {
 
     const res: any = await findFruitResolver({ name: lemon.name });
 
+    const fruit = await Fruit.findOne({ name: lemon.name });
+
+    expect(res).not.toBeInstanceOf(Error);
+
     expect(res.fruit).toBeDefined();
     expect(res.fruit.name).toBe(lemon.name);
+    expect(res.fruit.name).toBe(fruit?.name);
+
+    expect(fruit).toBeDefined();
   });
 
   /**
@@ -336,9 +373,15 @@ describe('Test findFruitResolver', () => {
 
     await seedData(lemon);
 
-    const res: any = await findFruitResolver({ name: 'not a lemon' });
+    const findParams = { name: 'not a lemon' };
+    const res: any = await findFruitResolver(findParams);
 
+    const fruit = await Fruit.findOne(findParams);
+
+    expect(res).toBeInstanceOf(Error);
     expect(res.fruit).toBeUndefined();
     expect(res).toEqual(new Error('Fruit not found!'));
+
+    expect(fruit).toBeNull();
   });
 });
