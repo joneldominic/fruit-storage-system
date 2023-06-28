@@ -13,18 +13,12 @@ export default class ContainerProductCount extends ValueObject<ContainerProductC
     return this.props.value;
   }
 
-  private constructor(value: number) {
-    super({ value });
+  private constructor(value?: number) {
+    super({ value: value || 0 });
   }
 
-  public static create(value: number): Result<ContainerProductCount> {
-    const nullGuardResult = Guard.againstNullOrUndefined(value, 'containerProductCount');
-
-    if (nullGuardResult.isFailure) {
-      return Result.fail<ContainerProductCount>(nullGuardResult.getErrorValue());
-    }
-
-    const minGuardResult = Guard.greaterThanOrEqual(this.minValue, value);
+  public static create(value?: number): Result<ContainerProductCount> {
+    const minGuardResult = Guard.greaterThanOrEqual(this.minValue, value || 0);
 
     if (minGuardResult.isFailure) {
       return Result.fail<ContainerProductCount>(minGuardResult.getErrorValue());
