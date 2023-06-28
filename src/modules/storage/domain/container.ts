@@ -18,6 +18,10 @@ export default class Container extends AggregateRoot<ContainerProps> {
     return ContainerId.create(this.id).getValue();
   }
 
+  get productId(): ProductId {
+    return this.props.productId;
+  }
+
   get capacity(): ContainerCapacity {
     return this.props.capacity;
   }
@@ -36,6 +40,15 @@ export default class Container extends AggregateRoot<ContainerProps> {
     const guardResult = Guard.againstNullOrUndefinedBulk(guardArgs);
 
     if (guardResult.isFailure) {
+      return Result.fail<Container>(guardResult.getErrorValue());
+    }
+
+    const maxProductCountGuardResult = Guard.lessThanOrEqual(
+      props.capacity.value,
+      props.productCount.value
+    );
+
+    if (maxProductCountGuardResult.isFailure) {
       return Result.fail<Container>(guardResult.getErrorValue());
     }
 

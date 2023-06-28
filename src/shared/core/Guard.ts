@@ -34,6 +34,20 @@ export class Guard {
         );
   }
 
+  public static lessThan(minValue: number, actualValue: number): Result<GuardResponse> {
+    return actualValue < minValue
+      ? Result.ok<GuardResponse>()
+      : Result.fail<GuardResponse>(`Number given {${actualValue}} is not less than {${minValue}}`);
+  }
+
+  public static lessThanOrEqual(minValue: number, actualValue: number): Result<GuardResponse> {
+    return actualValue <= minValue
+      ? Result.ok<GuardResponse>()
+      : Result.fail<GuardResponse>(
+          `Number given {${actualValue}} is not less than or equal to {${minValue}}`
+        );
+  }
+
   public static againstAtLeast(numChars: number, text: string): Result<GuardResponse> {
     return text.length >= numChars
       ? Result.ok<GuardResponse>()
