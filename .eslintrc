@@ -18,7 +18,9 @@
     "no-loops/no-loops": 1,
     "prettier/prettier": 2,
     "no-underscore-dangle": [0, { "allow": ["_place"] }],
+    "no-useless-constructor": 0,
     "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-inferrable-types": 0,
     "@typescript-eslint/typedef": [
       1,
       {

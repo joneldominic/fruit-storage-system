@@ -1,3 +1,6 @@
 node_modules
 build
 src/graphql/generated
+
+# Ignore core files
+src/shared/core
