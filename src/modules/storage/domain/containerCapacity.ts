@@ -13,23 +13,23 @@ export default class ContainerCapacity extends ValueObject<ContainerCapacityProp
     return this.props.value;
   }
 
-  private constructor(props: ContainerCapacityProps) {
-    super(props);
+  private constructor(value: number) {
+    super({ value });
   }
 
-  public static create(props: ContainerCapacityProps): Result<ContainerCapacity> {
-    const nullGuardResult = Guard.againstNullOrUndefined(props.value, 'containerCapacity');
+  public static create(value: number): Result<ContainerCapacity> {
+    const nullGuardResult = Guard.againstNullOrUndefined(value, 'containerCapacity');
 
     if (nullGuardResult.isFailure) {
       return Result.fail<ContainerCapacity>(nullGuardResult.getErrorValue());
     }
 
-    const minGuardResult = Guard.greaterThanOrEqual(this.minValue, props.value);
+    const minGuardResult = Guard.greaterThanOrEqual(this.minValue, value);
 
     if (minGuardResult.isFailure) {
       return Result.fail<ContainerCapacity>(minGuardResult.getErrorValue());
     }
 
-    return Result.ok<ContainerCapacity>(new ContainerCapacity(props));
+    return Result.ok<ContainerCapacity>(new ContainerCapacity(value));
   }
 }
