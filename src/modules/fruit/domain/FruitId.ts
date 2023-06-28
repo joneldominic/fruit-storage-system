@@ -12,6 +12,10 @@ export default class FruitId extends ValueObject<FruitIdProps> {
     return this.props.value;
   }
 
+  get stringValue(): string {
+    return this.props.value.toString();
+  }
+
   private constructor(value: UniqueEntityID) {
     super({ value });
   }
