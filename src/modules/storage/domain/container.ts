@@ -1,0 +1,53 @@
+import { Guard, IGuardArgument } from '../../../shared/core/Guard';
+import { Result } from '../../../shared/core/Result';
+import AggregateRoot from '../../../shared/domain/AggregateRoot';
+import UniqueEntityID from '../../../shared/domain/UniqueEntityID';
+import ContainerCapacity from './containerCapacity';
+import ContainerId from './containerId';
+import ContainerProductCount from './containerProductCount';
+import ProductId from './productId';
+
+interface ContainerProps {
+  productId: ProductId;
+  capacity: ContainerCapacity;
+  productCount: ContainerProductCount;
+}
+
+export default class Container extends AggregateRoot<ContainerProps> {
+  get containerId(): ContainerId {
+    return ContainerId.create(this.id).getValue();
+  }
+
+  get capacity(): ContainerCapacity {
+    return this.props.capacity;
+  }
+
+  get productCount(): ContainerProductCount {
+    return this.props.productCount;
+  }
+
+  public static create(props: ContainerProps, id?: UniqueEntityID): Result<Container> {
+    const guardArgs: IGuardArgument[] = [
+      { argument: props.productId, argumentName: 'productId' },
+      { argument: props.capacity, argumentName: 'capacity' },
+      { argument: props.productCount, argumentName: 'productCount' }
+    ];
+
+    const guardResult = Guard.againstNullOrUndefinedBulk(guardArgs);
+
+    if (guardResult.isFailure) {
+      return Result.fail<Container>(guardResult.getErrorValue());
+    }
+
+    const isNewContainer = !!id === false;
+
+    const values = { ...props };
+    const container = new Container(values, id);
+
+    if (isNewContainer) {
+      // TODO-JONEL: Add domain event
+    }
+
+    return Result.ok<Container>(container);
+  }
+}
