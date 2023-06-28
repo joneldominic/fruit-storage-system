@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import FruitDescription from './fruitDescription';
+import FruitDescription from '../../../../src/modules/fruit/domain/fruitDescription';
 
 describe('FruitDescription ', () => {
   it('should be able to create FruitDescription successfully', async () => {
