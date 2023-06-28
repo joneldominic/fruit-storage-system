@@ -2,7 +2,7 @@ import { Guard, IGuardArgument } from '../../../shared/core/Guard';
 import { Result } from '../../../shared/core/Result';
 import AggregateRoot from '../../../shared/domain/AggregateRoot';
 import UniqueEntityID from '../../../shared/domain/UniqueEntityID';
-import FruitId from './FruitId';
+import FruitId from './fruitId';
 import FruitDescription from './fruitDescription';
 import FruitName from './fruitName';
 
