@@ -16,6 +16,7 @@
   "rules": {
     "no-console": [1, { "allow": ["info", "warn", "error"] }],
     "no-loops/no-loops": 1,
+    "no-unused-vars": 0,
     "prettier/prettier": 2,
     "no-underscore-dangle": [0, { "allow": ["_place"] }],
     "no-useless-constructor": 0,
