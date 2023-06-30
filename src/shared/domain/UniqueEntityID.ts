@@ -1,8 +1,8 @@
-import { v4 as uuid } from 'uuid';
+import { Types } from 'mongoose';
 import Identifier from './Identifier';
 
-export default class UniqueEntityID extends Identifier<string | number> {
-  constructor(id?: string | number) {
-    super(id || uuid());
+export default class UniqueEntityID extends Identifier<string> {
+  constructor(id?: string) {
+    super(id || new Types.ObjectId().toHexString());
   }
 }
