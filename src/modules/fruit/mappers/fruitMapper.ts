@@ -6,7 +6,7 @@ import FruitId from '../domain/fruitId';
 import FruitName from '../domain/fruitName';
 import { FruitDTO } from '../dtos/fruitDTO';
 
-export default class FruitMap implements Mapper<Fruit> {
+export default class FruitMapper implements Mapper<Fruit> {
   public static toDTO(fruit: Fruit): FruitDTO {
     return {
       name: fruit.name.value,
@@ -24,7 +24,7 @@ export default class FruitMap implements Mapper<Fruit> {
         name: fruitNameOrError.getValue(),
         description: fruitDescriptionOrError.getValue()
       },
-      fruitIdOrEmpty.getValue().value
+      fruitIdOrEmpty.getValue()
     );
 
     if (fruitOrError.isFailure || !fruitOrError.isSuccess) {

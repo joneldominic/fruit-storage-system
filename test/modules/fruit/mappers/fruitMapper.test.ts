@@ -1,7 +1,7 @@
 import { describe, it, expect } from '@jest/globals';
 import FruitName from '../../../../src/modules/fruit/domain/fruitName';
 import FruitDescription from '../../../../src/modules/fruit/domain/fruitDescription';
-import FruitMap from '../../../../src/modules/fruit/mappers/fruitMap';
+import FruitMapper from '../../../../src/modules/fruit/mappers/fruitMapper';
 import Fruit from '../../../../src/modules/fruit/domain/fruit';
 import FruitId from '../../../../src/modules/fruit/domain/fruitId';
 import UniqueEntityID from '../../../../src/shared/domain/UniqueEntityID';
@@ -14,12 +14,12 @@ const fruitData = Fruit.create(
     name: fruitName.getValue(),
     description: fruitDescription.getValue()
   },
-  fruitId.getValue().value
+  fruitId.getValue()
 ).getValue();
 
 describe('FruitDTO ', () => {
   it('should be able to map Fruit to DTO', async () => {
-    const mappedFruitDTO = FruitMap.toDTO(fruitData);
+    const mappedFruitDTO = FruitMapper.toDTO(fruitData);
 
     expect(mappedFruitDTO).toHaveProperty('name');
     expect(mappedFruitDTO).toHaveProperty('description');
@@ -33,7 +33,7 @@ describe('FruitDTO ', () => {
       name: 'lemon',
       description: 'this is a lemon'
     };
-    const mappedFruitDomain = FruitMap.toDomain(fruitRawData);
+    const mappedFruitDomain = FruitMapper.toDomain(fruitRawData);
 
     expect(mappedFruitDomain).toBeInstanceOf(Fruit);
     expect(mappedFruitDomain.fruitId.stringValue).toBe(fruitRawData.id);
@@ -42,7 +42,7 @@ describe('FruitDTO ', () => {
   });
 
   it('should be able to map Fruit into persistence object', async () => {
-    const mappedFruitPersistence = FruitMap.toPersistence(fruitData);
+    const mappedFruitPersistence = FruitMapper.toPersistence(fruitData);
 
     expect(mappedFruitPersistence).toHaveProperty('id');
     expect(mappedFruitPersistence).toHaveProperty('name');
