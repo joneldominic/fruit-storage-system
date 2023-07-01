@@ -4,10 +4,14 @@ import UniqueEntityID from '../../../../src/shared/domain/UniqueEntityID';
 
 describe('ContainerId ', () => {
   it('should be able to create ContainerId successfully', async () => {
-    const containerId = new UniqueEntityID();
-    const containerIdOrError = ContainerId.create(containerId);
+    // Arrange
+    const validContainerId = new UniqueEntityID();
 
+    // Act
+    const containerIdOrError = ContainerId.create(validContainerId);
+
+    // Assert
     expect(containerIdOrError.isSuccess).toBeTruthy();
-    expect(containerIdOrError.getValue().value).toBe(containerId);
+    expect(containerIdOrError.getValue().value).toBe(validContainerId);
   });
 });

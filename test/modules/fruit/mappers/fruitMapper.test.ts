@@ -1,54 +1,110 @@
-import { describe, it, expect } from '@jest/globals';
-import FruitName from '../../../../src/modules/fruit/domain/fruitName';
-import FruitDescription from '../../../../src/modules/fruit/domain/fruitDescription';
+import { describe, it, expect, jest } from '@jest/globals';
 import FruitMapper from '../../../../src/modules/fruit/mappers/fruitMapper';
 import Fruit from '../../../../src/modules/fruit/domain/fruit';
-import FruitId from '../../../../src/modules/fruit/domain/fruitId';
 import UniqueEntityID from '../../../../src/shared/domain/UniqueEntityID';
-
-const fruitId = FruitId.create(new UniqueEntityID());
-const fruitName = FruitName.create({ value: 'lemon' });
-const fruitDescription = FruitDescription.create({ value: 'this is a lemon' });
-const fruitData = Fruit.create(
-  {
-    name: fruitName.getValue(),
-    description: fruitDescription.getValue()
-  },
-  fruitId.getValue()
-).getValue();
 
 describe('FruitDTO ', () => {
   it('should be able to map Fruit to DTO', async () => {
-    const mappedFruitDTO = FruitMapper.toDTO(fruitData);
+    // Arrange
+    const fruitUniqueID = new UniqueEntityID();
+    const fakeFruitId = {
+      value: fruitUniqueID,
+      stringValue: fruitUniqueID.toString(),
+      props: { value: fruitUniqueID },
+      equals: jest.fn((): boolean => true)
+    };
 
-    expect(mappedFruitDTO).toHaveProperty('name');
-    expect(mappedFruitDTO).toHaveProperty('description');
-    expect(mappedFruitDTO.name).toBe(fruitName.getValue().value);
-    expect(mappedFruitDTO.description).toBe(fruitDescription.getValue().value);
+    const fakeFruitName = {
+      value: 'Lemon',
+      props: { value: 'Lemon' },
+      equals: jest.fn((): boolean => true)
+    };
+
+    const fakeDescription = {
+      value: 'this is a lemon',
+      props: { value: 'this is a lemon' },
+      equals: jest.fn((): boolean => true)
+    };
+
+    const fruit: any = {
+      id: fruitUniqueID,
+      fruitId: fakeFruitId,
+      name: fakeFruitName,
+      description: fakeDescription,
+      props: {
+        name: fakeFruitName,
+        description: fakeDescription
+      },
+      equals: jest.fn((): boolean => true)
+    };
+
+    // Act
+    const mappedFruitDTO = FruitMapper.toDTO(fruit);
+
+    // Assert
+    expect(mappedFruitDTO.name).toBe(fakeFruitName.value);
+    expect(mappedFruitDTO.description).toBe(fakeDescription.value);
   });
 
   it('should be able to map raw object to Fruit', async () => {
+    // Arrange
+    const fruitUniqueID = new UniqueEntityID();
     const fruitRawData = {
-      id: fruitId.getValue().stringValue,
+      id: fruitUniqueID,
       name: 'lemon',
       description: 'this is a lemon'
     };
+
+    // Act
     const mappedFruitDomain = FruitMapper.toDomain(fruitRawData);
 
+    // Assert
     expect(mappedFruitDomain).toBeInstanceOf(Fruit);
-    expect(mappedFruitDomain.fruitId.stringValue).toBe(fruitRawData.id);
+    expect(mappedFruitDomain.fruitId.stringValue).toBe(fruitRawData.id.toString());
     expect(mappedFruitDomain.name.value).toBe(fruitRawData.name);
     expect(mappedFruitDomain.description.value).toBe(fruitRawData.description);
   });
 
   it('should be able to map Fruit into persistence object', async () => {
-    const mappedFruitPersistence = FruitMapper.toPersistence(fruitData);
+    // Arrange
+    const fruitUniqueID = new UniqueEntityID();
+    const fakeFruitId = {
+      value: fruitUniqueID,
+      stringValue: fruitUniqueID.toString(),
+      props: { value: fruitUniqueID },
+      equals: jest.fn((): boolean => true)
+    };
 
-    expect(mappedFruitPersistence).toHaveProperty('id');
-    expect(mappedFruitPersistence).toHaveProperty('name');
-    expect(mappedFruitPersistence).toHaveProperty('description');
-    expect(mappedFruitPersistence.id).toBe(fruitId.getValue().stringValue);
-    expect(mappedFruitPersistence.name).toBe(fruitName.getValue().value);
-    expect(mappedFruitPersistence.description).toBe(fruitDescription.getValue().value);
+    const fakeFruitName = {
+      value: 'Lemon',
+      props: { value: 'Lemon' },
+      equals: jest.fn((): boolean => true)
+    };
+
+    const fakeDescription = {
+      value: 'this is a lemon',
+      props: { value: 'this is a lemon' },
+      equals: jest.fn((): boolean => true)
+    };
+
+    const fruit: any = {
+      id: fruitUniqueID,
+      fruitId: fakeFruitId,
+      name: fakeFruitName,
+      description: fakeDescription,
+      props: {
+        name: fakeFruitName,
+        description: fakeDescription
+      },
+      equals: jest.fn((): boolean => true)
+    };
+
+    // Act
+    const mappedFruitPersistence = FruitMapper.toPersistence(fruit);
+
+    // Assert
+    expect(mappedFruitPersistence.id).toBe(fakeFruitId.stringValue);
+    expect(mappedFruitPersistence.name).toBe(fakeFruitName.value);
+    expect(mappedFruitPersistence.description).toBe(fakeDescription.value);
   });
 });

@@ -1,18 +1,13 @@
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import IFruitRepository from '../../../../../src/modules/fruit/repos/fruitRepository';
-import Fruit from '../../../../../src/modules/fruit/domain/fruit';
 import CreateFruitUseCase from '../../../../../src/modules/fruit/useCases/createFruit/createFruitUseCase';
 
 describe('Create Fruit Use Case', () => {
   it('should execute successfully', async () => {
     // Arrange
     const fakeFruitRepository: IFruitRepository = {
-      exists: jest.fn(async (name: string): Promise<boolean> => {
-        return false;
-      }),
-      save: jest.fn(async (fruit: Fruit): Promise<void> => {
-        return;
-      })
+      exists: jest.fn(async (): Promise<boolean> => false),
+      save: jest.fn(async (): Promise<void> => undefined)
     };
     const createFruitUseCase = new CreateFruitUseCase(fakeFruitRepository);
 
@@ -31,12 +26,8 @@ describe('Create Fruit Use Case', () => {
   it('should fail when fruit already exists', async () => {
     // Arrange
     const fakeFruitRepository: IFruitRepository = {
-      exists: jest.fn(async (name: string): Promise<boolean> => {
-        return true;
-      }),
-      save: jest.fn(async (fruit: Fruit): Promise<void> => {
-        return;
-      })
+      exists: jest.fn(async (): Promise<boolean> => true),
+      save: jest.fn(async (): Promise<void> => undefined)
     };
     const createFruitUseCase = new CreateFruitUseCase(fakeFruitRepository);
 

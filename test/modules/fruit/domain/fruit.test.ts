@@ -1,90 +1,72 @@
-import { describe, it, expect } from '@jest/globals';
-import FruitName from '../../../../src/modules/fruit/domain/fruitName';
+import { describe, it, expect, jest } from '@jest/globals';
 import Fruit from '../../../../src/modules/fruit/domain/fruit';
-import FruitDescription from '../../../../src/modules/fruit/domain/fruitDescription';
 import UniqueEntityID from '../../../../src/shared/domain/UniqueEntityID';
-import FruitId from '../../../../src/modules/fruit/domain/fruitId';
 
 describe('Fruit ', () => {
   it('should be able to create Fruit successfully', async () => {
-    const fruitId = new UniqueEntityID();
-    const fruitName = 'Lemon';
-    const fruitDescription = 'this is a lemon';
+    // Arrange
+    const fruitUniqueID = new UniqueEntityID();
+    const fakeFruitId = {
+      value: fruitUniqueID,
+      stringValue: fruitUniqueID.toString(),
+      props: { value: fruitUniqueID },
+      equals: jest.fn((): boolean => true)
+    };
+
+    const fakeFruitName = {
+      value: 'Lemon',
+      props: { value: 'Lemon' },
+      equals: jest.fn((): boolean => true)
+    };
+
+    const fakeDescription = {
+      value: 'this is a lemon',
+      props: { value: 'this is a lemon' },
+      equals: jest.fn((): boolean => true)
+    };
 
     const fruit = {
-      name: FruitName.create({
-        value: fruitName
-      }).getValue(),
-      description: FruitDescription.create({
-        value: fruitDescription
-      }).getValue()
+      name: fakeFruitName,
+      description: fakeDescription
     };
 
-    const fruitOrError = Fruit.create(fruit, FruitId.create(fruitId).getValue());
+    // Act
+    const fruitOrError = Fruit.create(fruit, fakeFruitId);
 
+    // Assert
     expect(fruitOrError.isSuccess).toBeTruthy();
-    expect(fruitOrError.getValue().fruitId.value).toBe(fruitId);
-    expect(fruitOrError.getValue().name.value).toBe(fruitName);
-    expect(fruitOrError.getValue().description.value).toBe(fruitDescription);
+    expect(fruitOrError.getValue().fruitId.value).toBe(fruitUniqueID);
+    expect(fruitOrError.getValue().name.value).toBe(fakeFruitName.value);
+    expect(fruitOrError.getValue().description.value).toBe(fakeDescription.value);
   });
 
-  it('should fail on creating fruit with empty FruitName', async () => {
-    const fruitName = '';
-    const fruitDescription = 'this is a lemon';
-
-    const createFruit = () => {
-      const fruit = {
-        name: FruitName.create({
-          value: fruitName
-        }).getValue(),
-        description: FruitDescription.create({
-          value: fruitDescription
-        }).getValue()
-      };
-
-      Fruit.create(fruit);
+  it('should should fail creating fruit when either name or description is null or undefined', async () => {
+    // Arrange
+    const fruitUniqueID = new UniqueEntityID();
+    const fakeFruitId = {
+      value: fruitUniqueID,
+      stringValue: fruitUniqueID.toString(),
+      props: { value: fruitUniqueID },
+      equals: jest.fn((): boolean => true)
     };
 
-    expect(createFruit).toThrow();
-  });
+    const fakeFruitName: any = null;
 
-  it('should fail on creating fruit with empty FruitDescription', async () => {
-    const fruitName = 'Lemon';
-    const fruitDescription = '';
-
-    const createFruit = () => {
-      const fruit = {
-        name: FruitName.create({
-          value: fruitName
-        }).getValue(),
-        description: FruitDescription.create({
-          value: fruitDescription
-        }).getValue()
-      };
-
-      Fruit.create(fruit);
+    const fakeDescription = {
+      value: 'this is a lemon',
+      props: { value: 'this is a lemon' },
+      equals: jest.fn((): boolean => true)
     };
 
-    expect(createFruit).toThrow();
-  });
-
-  it('should fail on creating fruit with FruitDescription value beyond 30 characters', async () => {
-    const fruitName = 'Lemon';
-    const fruitDescription = 'this is a fruit with a very long description';
-
-    const createFruit = () => {
-      const fruit = {
-        name: FruitName.create({
-          value: fruitName
-        }).getValue(),
-        description: FruitDescription.create({
-          value: fruitDescription
-        }).getValue()
-      };
-
-      Fruit.create(fruit);
+    const fruit = {
+      name: fakeFruitName,
+      description: fakeDescription
     };
 
-    expect(createFruit).toThrow();
+    // Act
+    const fruitOrError = Fruit.create(fruit, fakeFruitId);
+
+    // Assert
+    expect(fruitOrError.isFailure).toBeTruthy();
   });
 });

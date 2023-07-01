@@ -3,30 +3,42 @@ import FruitDescription from '../../../../src/modules/fruit/domain/fruitDescript
 
 describe('FruitDescription ', () => {
   it('should be able to create FruitDescription successfully', async () => {
-    const fruitDescription = 'this is a lemon';
+    // Arrange
+    const validFruitDescription = 'this is a lemon';
+
+    // Act
     const fruitDescriptionOrError = FruitDescription.create({
-      value: fruitDescription
+      value: validFruitDescription
     });
 
+    // Assert
     expect(fruitDescriptionOrError.isSuccess).toBeTruthy();
-    expect(fruitDescriptionOrError.getValue().value).toBe(fruitDescription);
+    expect(fruitDescriptionOrError.getValue().value).toBe(validFruitDescription);
   });
 
   it('should fail on creating FruitDescription with an empty string', async () => {
-    const fruitDescription = '';
+    // Arrange
+    const invalidFruitDescription = '';
+
+    // Act
     const fruitDescriptionOrError = FruitDescription.create({
-      value: fruitDescription
+      value: invalidFruitDescription
     });
 
+    // Assert
     expect(fruitDescriptionOrError.isFailure).toBeTruthy();
   });
 
   it('should fail on creating FruitDescription with value beyond 30 characters', async () => {
-    const fruitDescription = 'this is a fruit with a very long description';
+    // Arrange
+    const invalidFruitDescription = 'this is a fruit with a very long description';
+
+    // Act
     const fruitDescriptionOrError = FruitDescription.create({
-      value: fruitDescription
+      value: invalidFruitDescription
     });
 
+    // Assert
     expect(fruitDescriptionOrError.isFailure).toBeTruthy();
   });
 });

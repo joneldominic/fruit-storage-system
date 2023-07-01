@@ -4,10 +4,14 @@ import UniqueEntityID from '../../../../src/shared/domain/UniqueEntityID';
 
 describe('ProductId ', () => {
   it('should be able to create ProductId successfully', async () => {
-    const productId = new UniqueEntityID();
-    const productIdOrError = ProductId.create(productId);
+    // Arrange
+    const validProductId = new UniqueEntityID();
 
+    // Act
+    const productIdOrError = ProductId.create(validProductId);
+
+    // Assert
     expect(productIdOrError.isSuccess).toBeTruthy();
-    expect(productIdOrError.getValue().value).toBe(productId);
+    expect(productIdOrError.getValue().value).toBe(validProductId);
   });
 });

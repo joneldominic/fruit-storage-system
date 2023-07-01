@@ -3,21 +3,29 @@ import FruitName from '../../../../src/modules/fruit/domain/fruitName';
 
 describe('FruitName ', () => {
   it('should be able to create FruitName successfully', async () => {
-    const fruitName = 'Lemon';
+    // Arrange
+    const validFruitName = 'Lemon';
+
+    // Act
     const fruitNameOrError = FruitName.create({
-      value: fruitName
+      value: validFruitName
     });
 
+    // Assert
     expect(fruitNameOrError.isSuccess).toBeTruthy();
-    expect(fruitNameOrError.getValue().value).toBe(fruitName);
+    expect(fruitNameOrError.getValue().value).toBe(validFruitName);
   });
 
   it('should fail on creating FruitName with an empty string', async () => {
-    const fruitName = '';
+    // Arrange
+    const invalidFruitName = '';
+
+    // Act
     const fruitOrError = FruitName.create({
-      value: fruitName
+      value: invalidFruitName
     });
 
+    // Assert
     expect(fruitOrError.isFailure).toBeTruthy();
   });
 });
