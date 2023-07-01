@@ -1,6 +1,6 @@
 import { MongooseModels } from '../../../../../shared/infrastructure/database/mongoose/models';
 import Fruit from '../../../domain/fruit';
-import FruitMap from '../../../mappers/fruitMap';
+import FruitMapper from '../../../mappers/fruitMapper';
 import IFruitRepository from '../../fruitRepository';
 
 export default class FruitRepository implements IFruitRepository {
@@ -23,7 +23,7 @@ export default class FruitRepository implements IFruitRepository {
     const exists = await this.exists(fruit.name.value);
     if (exists) throw new Error('Fruit already exists.');
 
-    const rawMongooseFruit = FruitMap.toPersistence(fruit);
+    const rawMongooseFruit = FruitMapper.toPersistence(fruit);
     await FruitModel.create(rawMongooseFruit);
   }
 }
