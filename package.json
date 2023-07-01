@@ -10,6 +10,7 @@
     "lint-and-fix": "eslint . --ext .ts --fix",
     "prettier-format": "prettier --config .prettierrc ./src/**/*.{js,ts} --write",
     "test": "jest --runInBand --detectOpenHandles ./test",
+    "test-coverage": "jest --runInBand --detectOpenHandles ./test --coverage",
     "build": "rimraf ./build && tsc -p tsconfig.build.json",
     "prepare": "husky install",
     "postinstall": "husky install",
