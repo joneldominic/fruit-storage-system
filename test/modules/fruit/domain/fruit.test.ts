@@ -2,9 +2,12 @@ import { describe, it, expect } from '@jest/globals';
 import FruitName from '../../../../src/modules/fruit/domain/fruitName';
 import Fruit from '../../../../src/modules/fruit/domain/fruit';
 import FruitDescription from '../../../../src/modules/fruit/domain/fruitDescription';
+import UniqueEntityID from '../../../../src/shared/domain/UniqueEntityID';
+import FruitId from '../../../../src/modules/fruit/domain/fruitId';
 
 describe('Fruit ', () => {
   it('should be able to create Fruit successfully', async () => {
+    const fruitId = new UniqueEntityID();
     const fruitName = 'Lemon';
     const fruitDescription = 'this is a lemon';
 
@@ -17,11 +20,10 @@ describe('Fruit ', () => {
       }).getValue()
     };
 
-    const fruitOrError = Fruit.create(fruit);
+    const fruitOrError = Fruit.create(fruit, FruitId.create(fruitId).getValue());
 
     expect(fruitOrError.isSuccess).toBeTruthy();
-    expect(fruitOrError.getValue().id).toBeDefined();
-    expect(fruitOrError.getValue().id).not.toBeNull();
+    expect(fruitOrError.getValue().fruitId.value).toBe(fruitId);
     expect(fruitOrError.getValue().name.value).toBe(fruitName);
     expect(fruitOrError.getValue().description.value).toBe(fruitDescription);
   });

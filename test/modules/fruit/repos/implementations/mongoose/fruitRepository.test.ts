@@ -28,7 +28,7 @@ const fruitData = Fruit.create(
     name: fruitName.getValue(),
     description: fruitDescription.getValue()
   },
-  fruitId.getValue().value
+  fruitId.getValue()
 ).getValue();
 
 describe('Mongoose FruitRepository', () => {
