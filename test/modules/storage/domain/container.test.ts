@@ -3,12 +3,14 @@ import UniqueEntityID from '../../../../src/shared/domain/UniqueEntityID';
 import Container from '../../../../src/modules/storage/domain/container';
 import ContainerCapacity from '../../../../src/modules/storage/domain/containerCapacity';
 import ContainerProductCount from '../../../../src/modules/storage/domain/containerProductCount';
+import ContainerId from '../../../../src/modules/storage/domain/containerId';
 
 describe('Container', () => {
+  const productId = new UniqueEntityID();
   const mockProductId = {
-    value: new UniqueEntityID(),
+    value: productId,
     stringValue: '',
-    props: { value: new UniqueEntityID() },
+    props: { value: productId },
     equals: () => true
   };
 
@@ -16,19 +18,21 @@ describe('Container', () => {
     const capacity = 10;
     const expectedProductCount = 0;
 
+    const containedId = new UniqueEntityID();
     const container = {
       productId: mockProductId,
       capacity: ContainerCapacity.create(capacity).getValue(),
       productCount: ContainerProductCount.create().getValue()
     };
 
-    const containerOrError = Container.create(container);
+    const containerOrError = Container.create(
+      container,
+      ContainerId.create(containedId).getValue()
+    );
 
     expect(containerOrError.isSuccess).toBeTruthy();
-    expect(containerOrError.getValue().id).toBeDefined();
-    expect(containerOrError.getValue().id).not.toBeNull();
-    expect(containerOrError.getValue().productId).toBeDefined();
-    expect(containerOrError.getValue().productId).not.toBeNull();
+    expect(containerOrError.getValue().containerId.value).toBe(containedId);
+    expect(containerOrError.getValue().productId.value).toBe(productId);
     expect(containerOrError.getValue().capacity.value).toBe(capacity);
     expect(containerOrError.getValue().productCount.value).toBe(expectedProductCount);
   });
