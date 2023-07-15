@@ -40,7 +40,7 @@ describe('Fruit ', () => {
     expect(fruitOrError.getValue().description.value).toBe(fakeDescription.value);
   });
 
-  it('should should fail creating fruit when either name or description is null or undefined', async () => {
+  it('should fail creating fruit when either name or description is null or undefined', async () => {
     // Arrange
     const fruitUniqueID = new UniqueEntityID();
     const fakeFruitId = {
