@@ -1,5 +1,5 @@
 import { beforeAll, afterEach, afterAll, describe, it, expect, jest } from '@jest/globals';
-import { initDatabase, dropCollections, dropDatabase } from './setupMongoMemoryServer';
+import { initDatabase, dropCollections, dropDatabase } from '../../../../../setupMongoMemoryServer';
 import UniqueEntityID from '../../../../../../src/shared/domain/UniqueEntityID';
 import FruitRepository from '../../../../../../src/modules/fruit/repos/implementations/mongoose/fruitRepository';
 import Models from '../../../../../../src/shared/infrastructure/database/mongoose/models';
