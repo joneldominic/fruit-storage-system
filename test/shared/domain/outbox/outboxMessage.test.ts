@@ -7,7 +7,7 @@ describe('OutboxMessage ', () => {
     // Arrange
     const outboxMessageUniqueID = new UniqueEntityID();
     const outboxMessage = {
-      event: 'TEST EVENT',
+      eventId: 'TEST EVENT',
       status: 0,
       message: 'TEST MESSAGE',
       dateCreated: new Date()
@@ -19,7 +19,7 @@ describe('OutboxMessage ', () => {
     // Assert
     expect(outboxMessageOrError.isSuccess).toBeTruthy();
     expect(outboxMessageOrError.getValue().id).toBe(outboxMessageUniqueID);
-    expect(outboxMessageOrError.getValue().event).toBe(outboxMessage.event);
+    expect(outboxMessageOrError.getValue().eventId).toBe(outboxMessage.eventId);
     expect(outboxMessageOrError.getValue().status).toBe(outboxMessage.status);
     expect(outboxMessageOrError.getValue().message).toBe(outboxMessage.message);
     expect(outboxMessageOrError.getValue().dateCreated).toBe(outboxMessage.dateCreated);
@@ -29,7 +29,7 @@ describe('OutboxMessage ', () => {
     // Arrange
     const outboxMessageUniqueID = new UniqueEntityID();
     const outboxMessage = {
-      event: 'TEST EVENT',
+      eventId: 'TEST EVENT',
       status: 0,
       message: null,
       dateCreated: new Date()

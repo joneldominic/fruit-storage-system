@@ -2,7 +2,7 @@ import mongoose, { Schema, Types } from 'mongoose';
 
 interface IOutboxMessage {
   id: Types.ObjectId;
-  event: string | null;
+  eventId: string | null;
   status: number; // 0 = Pending, 1 = Done
   message: string | null;
   dateCreated: Date;
@@ -10,7 +10,7 @@ interface IOutboxMessage {
 
 const OutboxMessageSchema = new Schema<IOutboxMessage>({
   id: { type: Schema.Types.ObjectId },
-  event: { type: String },
+  eventId: { type: String },
   status: { type: Number },
   message: { type: String },
   dateCreated: { type: Date }

@@ -20,7 +20,7 @@ describe('Mongoose OutboxRepository', () => {
   it('should add message to outbox table successfully', async () => {
     // Arrange
     const props = {
-      event: 'TEST EVENT',
+      eventId: 'TEST EVENT',
       status: 0,
       message: 'TEST MESSAGE',
       dateCreated: new Date()
@@ -48,7 +48,7 @@ describe('Mongoose OutboxRepository', () => {
   it('should mark message as published successfully', async () => {
     // Arrange
     const props = {
-      event: 'TEST EVENT',
+      eventId: 'TEST EVENT',
       status: 0,
       message: 'TEST MESSAGE',
       dateCreated: new Date()
