@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npx nodemon",
     "start:prod": "npm run build && node build/index.js",
+    "start-docker": "cd docker && dbstart.bat",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
     "prettier-format": "prettier --config .prettierrc ./src/**/*.{js,ts} --write",
