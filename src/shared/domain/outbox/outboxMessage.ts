@@ -5,7 +5,7 @@ import { Guard, IGuardArgument } from '../../core/Guard';
 import OutboxMessageStatus from './outboxMessageStatus';
 
 interface OutboxMessageProps {
-  eventId: any;
+  event: any;
   status: OutboxMessageStatus;
   message: any;
   dateCreated: Date;
@@ -16,8 +16,8 @@ export default class OutboxMessage extends Entity<OutboxMessageProps> {
     return this._id;
   }
 
-  get eventId(): any {
-    return this.props.eventId;
+  get event(): any {
+    return this.props.event;
   }
 
   get status(): OutboxMessageStatus {
@@ -38,7 +38,7 @@ export default class OutboxMessage extends Entity<OutboxMessageProps> {
 
   public static create(props: OutboxMessageProps, id?: UniqueEntityID): Result<OutboxMessage> {
     const guardArgs: IGuardArgument[] = [
-      { argument: props.eventId, argumentName: 'eventId' },
+      { argument: props.event, argumentName: 'event' },
       { argument: props.status, argumentName: 'status' },
       { argument: props.message, argumentName: 'message' },
       { argument: props.dateCreated, argumentName: 'dateCreated' }

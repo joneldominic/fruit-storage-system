@@ -6,7 +6,7 @@ export default class OutboxMessageMapper implements Mapper<OutboxMessage> {
   public static toDomain(raw: any): OutboxMessage {
     const outboxMessageOrError = OutboxMessage.create(
       {
-        eventId: raw.eventId,
+        event: raw.event,
         status: raw.status,
         message: raw.message,
         dateCreated: raw.dateCreated
@@ -24,7 +24,7 @@ export default class OutboxMessageMapper implements Mapper<OutboxMessage> {
   public static toPersistence(outboxMessage: OutboxMessage): any {
     return {
       id: outboxMessage.id,
-      eventId: outboxMessage.eventId,
+      event: outboxMessage.event,
       status: outboxMessage.status,
       message: outboxMessage.message,
       dateCreated: outboxMessage.dateCreated
