@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Connection } from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
 let mongo: any;
@@ -32,4 +32,9 @@ export const dropDatabase = async () => {
   await mongoose.connection.close();
 
   await mongo.stop();
+};
+
+export const getDBConnection = (): Connection => {
+  if (!mongo) throw new Error('Connection not found');
+  return mongoose.connection;
 };
