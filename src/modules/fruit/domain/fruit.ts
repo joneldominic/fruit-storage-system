@@ -39,14 +39,8 @@ export default class Fruit extends AggregateRoot<FruitProps> {
       return Result.fail<Fruit>(guardResult.getErrorValue());
     }
 
-    const isNewFruit = !!fruitId === false;
-
     const values = { ...props };
     const fruit = new Fruit(values, fruitId);
-
-    if (isNewFruit) {
-      // TODO-JONEL: Add domain event
-    }
 
     return Result.ok<Fruit>(fruit);
   }

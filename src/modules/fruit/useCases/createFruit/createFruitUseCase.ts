@@ -10,13 +10,20 @@ import { CreateFruitResponseDTO } from './createFruitResponseDTO';
 import { Result, left, right } from '../../../../shared/core/Result';
 import { CreateFruitErrors } from './createFruitErrors';
 import Fruit from '../../domain/fruit';
+import OutboxMessage from '../../../../shared/domain/outbox/outboxMessage';
+import OutboxMessageStatus from '../../../../shared/domain/outbox/outboxMessageStatus';
+import FruitCreated from '../../domain/events/fruitCreated';
+import IUnitOfWork from '../../../../shared/infrastructure/unitOfWork/IUnitOfWork';
 
 export default class CreateFruitUseCase
   implements UseCase<CreateFruitRequestDTO, Promise<CreateFruitResponseDTO>>
 {
+  private unitOfWork: IUnitOfWork;
+
   private fruitRepository: IFruitRepository;
 
-  constructor(fruitRepository: IFruitRepository) {
+  constructor(unitOfWork: IUnitOfWork, fruitRepository: IFruitRepository) {
+    this.unitOfWork = unitOfWork;
     this.fruitRepository = fruitRepository;
   }
 
@@ -36,6 +43,7 @@ export default class CreateFruitUseCase
     const fruitDescription: FruitDescription = fruitDescriptionOrError.getValue();
 
     try {
+      await this.unitOfWork.startTransaction();
       const fruitAlreadyExists = await this.fruitRepository.exists(fruitName.value);
 
       if (fruitAlreadyExists) {
@@ -61,9 +69,23 @@ export default class CreateFruitUseCase
 
       await this.fruitRepository.save(fruit);
 
+      const fruitCreatedEvent = new FruitCreated(fruit);
+      await this.unitOfWork.getOutboxRepository().addMessage(
+        OutboxMessage.create({
+          eventId: fruitCreatedEvent.id,
+          status: OutboxMessageStatus.PENDING,
+          message: fruitCreatedEvent.toJSONString(),
+          dateCreated: new Date()
+        }).getValue()
+      );
+
+      await this.unitOfWork.commitTransaction();
       return right(Result.ok<void>());
     } catch (err) {
+      await this.unitOfWork.abortTransaction();
       return left(new AppError.UnexpectedError(err)) as CreateFruitResponseDTO;
+    } finally {
+      await this.unitOfWork.closeTransaction();
     }
   }
 }
