@@ -2,7 +2,6 @@ import OutboxRepository from '../../../domain/outbox/repos/implementations';
 import { getDBConnection } from '../../database/mongoose';
 import UnitOfWork from './mongoose/UnitOfWork';
 
-const mongoDBConnection = getDBConnection();
-const unitOfWork = new UnitOfWork(mongoDBConnection, OutboxRepository);
+const unitOfWork = new UnitOfWork(getDBConnection, OutboxRepository);
 
 export default unitOfWork;

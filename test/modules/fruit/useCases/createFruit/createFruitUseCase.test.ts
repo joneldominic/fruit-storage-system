@@ -19,7 +19,7 @@ describe('Create Fruit Use Case', () => {
     };
 
     const fakeUnitOfWork: IUnitOfWork = {
-      connection: 'TEST_CONNECTION',
+      connectionGetter: () => 'DUMMY_CONNECTION',
       outboxRepository: fakeOutboxRepository,
       getOutboxRepository: jest.fn((): IOutboxRepository => fakeOutboxRepository),
       startTransaction: jest.fn(async (): Promise<void> => {
@@ -72,7 +72,7 @@ describe('Create Fruit Use Case', () => {
     };
 
     const fakeUnitOfWork: IUnitOfWork = {
-      connection: 'TEST_CONNECTION',
+      connectionGetter: () => 'DUMMY_CONNECTION',
       outboxRepository: fakeOutboxRepository,
       getOutboxRepository: jest.fn((): IOutboxRepository => fakeOutboxRepository),
       startTransaction: jest.fn(async (): Promise<void> => {

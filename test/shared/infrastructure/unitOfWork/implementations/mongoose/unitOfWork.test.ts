@@ -34,9 +34,7 @@ describe('Mongoose UnitOfWork', () => {
       })
     };
 
-    const mongoDBMemoryConnection = getDBConnection();
-
-    const unitWork = new UnitWork(mongoDBMemoryConnection, fakeOutboxRepository);
+    const unitWork = new UnitWork(getDBConnection, fakeOutboxRepository);
 
     // Act
     const outboxRepository = unitWork.getOutboxRepository();
@@ -60,9 +58,7 @@ describe('Mongoose UnitOfWork', () => {
       })
     };
 
-    const mongoDBMemoryConnection = getDBConnection();
-
-    const unitWork = new UnitWork(mongoDBMemoryConnection, fakeOutboxRepository);
+    const unitWork = new UnitWork(getDBConnection, fakeOutboxRepository);
 
     // Act
     await unitWork.startTransaction();
@@ -84,9 +80,7 @@ describe('Mongoose UnitOfWork', () => {
       })
     };
 
-    const mongoDBMemoryConnection = getDBConnection();
-
-    const unitWork = new UnitWork(mongoDBMemoryConnection, fakeOutboxRepository);
+    const unitWork = new UnitWork(getDBConnection, fakeOutboxRepository);
 
     // Act
     await unitWork.startTransaction();
@@ -109,9 +103,7 @@ describe('Mongoose UnitOfWork', () => {
       })
     };
 
-    const mongoDBMemoryConnection = getDBConnection();
-
-    const unitWork = new UnitWork(mongoDBMemoryConnection, fakeOutboxRepository);
+    const unitWork = new UnitWork(getDBConnection, fakeOutboxRepository);
 
     // Act
     await unitWork.startTransaction();

@@ -1,8 +1,8 @@
 import IOutboxRepository from '../../domain/outbox/repos/outboxRepository';
 
 export default interface IUnitOfWork {
-  readonly connection: any;
   readonly outboxRepository: IOutboxRepository;
+  readonly connectionGetter: () => any;
   getOutboxRepository(): IOutboxRepository;
   startTransaction(): Promise<void>;
   commitTransaction(): Promise<void>;

@@ -5,12 +5,12 @@ import IUnitOfWork from '../../IUnitOfWork';
 export default class UnitOfWork implements IUnitOfWork {
   private session: ClientSession | undefined;
 
-  readonly connection: Connection;
-
   readonly outboxRepository: IOutboxRepository;
 
-  constructor(connection: Connection, outboxRepository: IOutboxRepository) {
-    this.connection = connection;
+  readonly connectionGetter: () => Connection;
+
+  constructor(connectionGetter: () => Connection, outboxRepository: IOutboxRepository) {
+    this.connectionGetter = connectionGetter;
     this.outboxRepository = outboxRepository;
   }
 
@@ -23,7 +23,7 @@ export default class UnitOfWork implements IUnitOfWork {
   }
 
   async startTransaction(): Promise<void> {
-    this.session = await this.connection.startSession();
+    this.session = await this.connectionGetter().startSession();
     this.session.startTransaction();
   }
 
