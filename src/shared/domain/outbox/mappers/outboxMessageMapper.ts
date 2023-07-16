@@ -11,7 +11,7 @@ export default class OutboxMessageMapper implements Mapper<OutboxMessage> {
         message: raw.message,
         dateCreated: raw.dateCreated
       },
-      new UniqueEntityID(raw.id)
+      new UniqueEntityID(raw._id)
     );
 
     if (outboxMessageOrError.isFailure || !outboxMessageOrError.isSuccess) {
@@ -23,7 +23,7 @@ export default class OutboxMessageMapper implements Mapper<OutboxMessage> {
 
   public static toPersistence(outboxMessage: OutboxMessage): any {
     return {
-      id: outboxMessage.id,
+      _id: outboxMessage.id,
       eventId: outboxMessage.eventId,
       status: outboxMessage.status,
       message: outboxMessage.message,

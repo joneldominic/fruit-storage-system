@@ -35,7 +35,7 @@ export default class OutboxRepository implements IOutboxRepository {
   async markMessageAsPublished(message: OutboxMessage): Promise<void> {
     const OutboxMessageModel = this.models.OutboxMessage;
 
-    const filter = { id: message.id };
+    const filter = { _id: message.id };
     const update = { status: OutboxMessageStatus.DONE };
 
     await OutboxMessageModel.updateOne(filter, update);

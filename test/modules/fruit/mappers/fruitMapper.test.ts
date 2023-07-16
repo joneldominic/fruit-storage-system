@@ -103,7 +103,7 @@ describe('FruitDTO ', () => {
     const mappedFruitPersistence = FruitMapper.toPersistence(fruit);
 
     // Assert
-    expect(mappedFruitPersistence.id).toBe(fakeFruitId.stringValue);
+    expect(mappedFruitPersistence._id).toBe(fakeFruitId.stringValue);
     expect(mappedFruitPersistence.name).toBe(fakeFruitName.value);
     expect(mappedFruitPersistence.description).toBe(fakeDescription.value);
   });

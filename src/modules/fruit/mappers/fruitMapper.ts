@@ -36,7 +36,7 @@ export default class FruitMapper implements Mapper<Fruit> {
 
   public static toPersistence(fruit: Fruit): any {
     return {
-      id: fruit.fruitId.stringValue,
+      _id: fruit.fruitId.stringValue,
       name: fruit.name.value,
       description: fruit.description.value
     };
