@@ -9,6 +9,7 @@ import { FruitDTO } from '../dtos/fruitDTO';
 export default class FruitMapper implements Mapper<Fruit> {
   public static toDTO(fruit: Fruit): FruitDTO {
     return {
+      id: fruit.id.toString(),
       name: fruit.name.value,
       description: fruit.description.value
     };
