@@ -11,23 +11,6 @@ export interface NexusGenInputs {
   CreateFruitInput: {
     // input type
     description: string; // String!
-    limit: number; // Int!
-    name: string; // String!
-  };
-  DeleteFruitInput: {
-    // input type
-    forceDelete?: boolean | null; // Boolean
-    name: string; // String!
-  };
-  StoreRemoveFruitInput: {
-    // input type
-    amount: number; // Int!
-    name: string; // String!
-  };
-  UpdateFruitInput: {
-    // input type
-    description: string; // String!
-    limit?: number | null; // Int
     name: string; // String!
   };
 }
@@ -43,25 +26,11 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Fruit: {
+  CreateFruitResponse: {
     // root type
     description?: string | null; // String
-    id?: string | null; // ID
+    id?: string | null; // String
     name?: string | null; // String
-  };
-  FruitStorage: {
-    // root type
-    count?: number | null; // Int
-    fruitId?: string | null; // String
-    id?: string | null; // ID
-    limit?: number | null; // Int
-  };
-  FruitStorageWithFruit: {
-    // root type
-    count?: number | null; // Int
-    fruit?: NexusGenRootTypes['Fruit'] | null; // Fruit
-    id?: string | null; // ID
-    limit?: number | null; // Int
   };
   Mutation: {};
   Query: {};
@@ -76,102 +45,44 @@ export type NexusGenRootTypes = NexusGenObjects;
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars;
 
 export interface NexusGenFieldTypes {
-  Fruit: {
+  CreateFruitResponse: {
     // field return type
     description: string | null; // String
-    id: string | null; // ID
+    id: string | null; // String
     name: string | null; // String
-  };
-  FruitStorage: {
-    // field return type
-    count: number | null; // Int
-    fruitId: string | null; // String
-    id: string | null; // ID
-    limit: number | null; // Int
-  };
-  FruitStorageWithFruit: {
-    // field return type
-    count: number | null; // Int
-    fruit: NexusGenRootTypes['Fruit'] | null; // Fruit
-    id: string | null; // ID
-    limit: number | null; // Int
   };
   Mutation: {
     // field return type
-    createFruitForFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
-    deleteFruitFromFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
-    removeFruitFromFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
-    storeFruitToFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
-    updateFruitForFruitStorage: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
+    CreateFruitMutation: NexusGenRootTypes['CreateFruitResponse'] | null; // CreateFruitResponse
   };
   Query: {
     // field return type
-    findFruit: NexusGenRootTypes['FruitStorageWithFruit'] | null; // FruitStorageWithFruit
+    ok: boolean; // Boolean!
   };
 }
 
 export interface NexusGenFieldTypeNames {
-  Fruit: {
+  CreateFruitResponse: {
     // field return type name
     description: 'String';
-    id: 'ID';
+    id: 'String';
     name: 'String';
-  };
-  FruitStorage: {
-    // field return type name
-    count: 'Int';
-    fruitId: 'String';
-    id: 'ID';
-    limit: 'Int';
-  };
-  FruitStorageWithFruit: {
-    // field return type name
-    count: 'Int';
-    fruit: 'Fruit';
-    id: 'ID';
-    limit: 'Int';
   };
   Mutation: {
     // field return type name
-    createFruitForFruitStorage: 'FruitStorageWithFruit';
-    deleteFruitFromFruitStorage: 'FruitStorageWithFruit';
-    removeFruitFromFruitStorage: 'FruitStorageWithFruit';
-    storeFruitToFruitStorage: 'FruitStorageWithFruit';
-    updateFruitForFruitStorage: 'FruitStorageWithFruit';
+    CreateFruitMutation: 'CreateFruitResponse';
   };
   Query: {
     // field return type name
-    findFruit: 'FruitStorageWithFruit';
+    ok: 'Boolean';
   };
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
-    createFruitForFruitStorage: {
+    CreateFruitMutation: {
       // args
       input: NexusGenInputs['CreateFruitInput']; // CreateFruitInput!
-    };
-    deleteFruitFromFruitStorage: {
-      // args
-      input: NexusGenInputs['DeleteFruitInput']; // DeleteFruitInput!
-    };
-    removeFruitFromFruitStorage: {
-      // args
-      input: NexusGenInputs['StoreRemoveFruitInput']; // StoreRemoveFruitInput!
-    };
-    storeFruitToFruitStorage: {
-      // args
-      input: NexusGenInputs['StoreRemoveFruitInput']; // StoreRemoveFruitInput!
-    };
-    updateFruitForFruitStorage: {
-      // args
-      input: NexusGenInputs['UpdateFruitInput']; // UpdateFruitInput!
-    };
-  };
-  Query: {
-    findFruit: {
-      // args
-      name: string; // String!
     };
   };
 }

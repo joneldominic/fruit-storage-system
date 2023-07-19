@@ -1,6 +1,6 @@
 node_modules
 build
-src/graphql/generated
+src/shared/infrastructure/http/graphql/nexus
 
 # Ignore core files
 src/shared/core
