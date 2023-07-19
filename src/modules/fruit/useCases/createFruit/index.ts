@@ -4,4 +4,4 @@ import CreateFruitUseCase from './createFruitUseCase';
 
 const createFruitUseCase = new CreateFruitUseCase(unitOfWork, fruitRepository);
 
-export default { createFruitUseCase };
+export default createFruitUseCase;

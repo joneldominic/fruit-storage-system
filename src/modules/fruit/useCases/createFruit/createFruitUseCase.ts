@@ -80,7 +80,7 @@ export default class CreateFruitUseCase
       );
 
       await this.unitOfWork.commitTransaction();
-      return right(Result.ok<void>());
+      return right(Result.ok<Fruit>(fruit));
     } catch (err) {
       await this.unitOfWork.abortTransaction();
       return left(new AppError.UnexpectedError(err)) as CreateFruitResponseDTO;

@@ -51,6 +51,7 @@ describe('Create Fruit Use Case', () => {
 
     // Assert
     expect(result.isRight()).toBeTruthy();
+    expect(result.value.getValue()).toBeTruthy();
     expect(fakeFruitRepository.exists).toHaveBeenCalled();
     expect(fakeFruitRepository.save).toHaveBeenCalled();
     expect(fakeUnitOfWork.startTransaction).toHaveBeenCalled();
