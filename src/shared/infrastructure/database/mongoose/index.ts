@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Connection } from 'mongoose';
 
 mongoose.Promise = global.Promise;
 
@@ -16,7 +16,7 @@ interface IMongoConfig {
   port: string | undefined;
 }
 
-let mongoDDConnection: mongoose.Connection;
+let mongoDDConnection: Connection;
 
 export const connectDB = async (config: IMongoConfig) => {
   const dbUrl = `${config.uri}:${config.port}/${config.dbName}`;
