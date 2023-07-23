@@ -30,6 +30,7 @@ export default class FruitMapper implements Mapper<Fruit> {
 
     if (fruitOrError.isFailure || !fruitOrError.isSuccess) {
       console.error(fruitOrError.getErrorValue());
+      return fruitOrError.getErrorValue();
     }
 
     return fruitOrError.getValue();

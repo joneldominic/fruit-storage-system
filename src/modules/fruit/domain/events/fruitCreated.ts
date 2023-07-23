@@ -2,6 +2,8 @@ import IDomainEvent from '../../../../shared/domain/events/IDomainEvent';
 import UniqueEntityID from '../../../../shared/domain/UniqueEntityID';
 import Fruit from '../fruit';
 
+export const FRUIT_CREATED_EVENT_ID = 'FRUIT_CREATED';
+
 export default class FruitCreated implements IDomainEvent {
   readonly id: string;
 
@@ -10,7 +12,7 @@ export default class FruitCreated implements IDomainEvent {
   readonly fruit: Fruit;
 
   constructor(fruit: Fruit) {
-    this.id = 'FRUIT_CREATED';
+    this.id = FRUIT_CREATED_EVENT_ID;
     this.dateTimeOccurred = new Date();
     this.fruit = fruit;
   }

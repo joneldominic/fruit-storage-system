@@ -16,6 +16,7 @@ export default class OutboxMessageMapper implements Mapper<OutboxMessage> {
 
     if (outboxMessageOrError.isFailure || !outboxMessageOrError.isSuccess) {
       console.error(outboxMessageOrError.getErrorValue());
+      return outboxMessageOrError.getErrorValue();
     }
 
     return outboxMessageOrError.getValue();
